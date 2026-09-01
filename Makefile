@@ -10,3 +10,5 @@ front-install:
 	cd front && npm install
 back-install:
 	cd back && npm install
+start: 
+	cd back && npm run start
