@@ -1,15 +1,19 @@
 import Fastify from "fastify";
 import routes from "@/routes/index.js";
+import { fastifyStatic } from "@fastify/static";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const fastify = Fastify();
 
-fastify.register(routes);
+// Backend routes
+fastify.register(routes, { prefix: "/api" });
 
-fastify.get("/ping", async () => {
-  return "pong\n";
-});
+// Frontend routes
+fastify.register(fastifyStatic, { root: path.join(__dirname, "../front/dist"), prefix: "/" });
 
-//коммент
 fastify.listen({ port: 8080 }, (err, address) => {
   if (err) {
     console.error(err);
