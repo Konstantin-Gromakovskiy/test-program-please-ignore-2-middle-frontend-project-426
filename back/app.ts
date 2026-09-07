@@ -4,11 +4,17 @@ import { fastifyStatic } from "@fastify/static";
 import path from "path";
 
 const fastify = Fastify();
+const PORT = process.env["PORT"];
+
+if (!PORT) throw new Error("PORT is not set");
 
 // Backend routes
 fastify.register(routes, { prefix: "/api" });
 // Frontend routes
-fastify.register(fastifyStatic, { root: path.resolve(process.cwd(), "../front/dist"), prefix: "/" });
+fastify.register(fastifyStatic, {
+  root: path.resolve(process.cwd(), "../front/dist"),
+  prefix: "/",
+});
 
 fastify.setNotFoundHandler((request, reply) => {
   if (request.url.startsWith("/api")) return reply.code(404).send();
@@ -16,7 +22,7 @@ fastify.setNotFoundHandler((request, reply) => {
   return reply.sendFile("index.html");
 });
 
-fastify.listen({ port: 8080, host: "0.0.0.0" }, (err, address) => {
+fastify.listen({ port: Number(PORT) }, (err, address) => {
   if (err) {
     console.error(err);
     process.exit(1);
