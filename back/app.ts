@@ -22,7 +22,7 @@ fastify.setNotFoundHandler((request, reply) => {
   return reply.sendFile("index.html");
 });
 
-fastify.listen({ port: Number(PORT) }, (err, address) => {
+fastify.listen({ host: "0.0.0.0", port: Number(PORT) }, (err, address) => {
   if (err) {
     console.error(err);
     process.exit(1);
