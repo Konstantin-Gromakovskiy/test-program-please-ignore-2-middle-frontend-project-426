@@ -1,6 +1,9 @@
 FROM node:24-alpine AS front-builder
 WORKDIR /app/front
 
+ARG VITE_SENTRY_DSN
+ENV VITE_SENTRY_DSN=$VITE_SENTRY_DSN
+
 COPY front/package*.json ./
 RUN npm ci
 COPY front/ ./
