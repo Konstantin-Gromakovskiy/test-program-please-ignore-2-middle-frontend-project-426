@@ -28,6 +28,13 @@ function App() {
         >
           Count is {count}
         </button>
+        <button
+          type="button"
+          className="counter"
+          onClick={() => {throw new Error('Ошибка выброшенная в кнопке')}}
+        > 
+          Кнопка для выброса ошибки
+        </button>
       </section>
 
       <div className="ticks"></div>
