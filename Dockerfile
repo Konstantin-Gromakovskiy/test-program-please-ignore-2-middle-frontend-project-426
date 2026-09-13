@@ -10,6 +10,15 @@ COPY front/ ./
 RUN npm run build
 
 
+FROM node:24-alpine AS contract-builder
+WORKDIR /app/contract
+
+COPY contract/package*.json ./
+RUN npm ci
+COPY contract/ ./
+RUN npm run compile
+
+
 FROM node:24-alpine AS back-builder
 WORKDIR /app/back
 
@@ -29,6 +38,8 @@ RUN npm ci --omit=dev
 
 COPY --from=front-builder /app/front/dist /app/front/dist
 COPY --from=back-builder /app/back/dist ./dist
+COPY --from=contract-builder /app/contract/index.html /app/contract/index.html
+COPY --from=contract-builder /app/contract/tsp-output/schema/openapi.json /app/contract/tsp-output/schema/openapi.json
 EXPOSE 8080
 
 CMD ["node", "dist/app.js"]

@@ -8,6 +8,7 @@ options:
     emitter-output-dir: "{output-dir}/schema"
     openapi-versions:
       - 3.1.0
+    file-type: json
   "@typespec/http-client-js":
     emitter-output-dir: "{output-dir}/clients/js"
   "@typespec/http-server-js":

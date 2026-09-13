@@ -20,9 +20,16 @@ function isErrorWithStatusCode(error: unknown): error is ErrorWithStatusCode {
 if (SENTRY_DSN) Sentry.init({ dsn: SENTRY_DSN, environment: NODE_ENV });
 
 const fastify = Fastify({ logger: true });
+const contractRoot = path.resolve(process.cwd(), "../contract");
 
 // Backend routes
 fastify.register(routes, { prefix: "/api" });
+fastify.get("/api/openapi.json", (_, reply) => {
+  return reply.type("application/json").sendFile("openapi.json", path.join(contractRoot, "tsp-output/schema"));
+});
+fastify.get("/api/docs", (_, reply) => {
+  return reply.type("text/html").sendFile("index.html", contractRoot);
+});
 // Frontend routes
 fastify.register(fastifyStatic, {
   root: path.resolve(process.cwd(), "../front/dist"),
