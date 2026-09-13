@@ -16,8 +16,13 @@ jobs:
       PORT: 3000
     steps:
       - uses: actions/checkout@v4
+
       - name: Build Docker compose
         run: docker compose up --build -d
+
+      - name: Wait for App to start
+        run: npx wait-on http://localhost:3000/api/health-check
+
       - name: Run tests
         run: make test
 
