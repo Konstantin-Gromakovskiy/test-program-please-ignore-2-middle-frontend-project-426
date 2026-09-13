@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "compile": "tsp compile .",
-    "serve": "live-server --port=8080 --no-browser --watch=tsp-output/schema/openapi.yaml"
+    "serve": "live-server --port=8080 --no-browser --watch=tsp-output/schema/openapi.json"
   },
   "dependencies": {
     "@typespec/compiler": "^1.16.0",

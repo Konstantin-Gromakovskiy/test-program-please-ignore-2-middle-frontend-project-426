@@ -13,7 +13,9 @@
     <script>
       Scalar.createApiReference("#app", {
         // The URL of the API document
-        url: "/api/openapi.json",
+        url: window.location.pathname.startsWith("/api/")
+          ? "/api/openapi.json"
+          : "./tsp-output/schema/openapi.json",
         // Avoid CORS issues
         proxyUrl: "https://proxy.scalar.com",
       });
