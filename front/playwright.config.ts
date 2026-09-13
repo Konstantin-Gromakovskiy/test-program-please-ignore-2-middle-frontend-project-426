@@ -15,11 +15,6 @@ export default defineConfig({
     baseURL: `http://127.0.0.1:${PORT}`,
     trace: 'on-first-retry',
   },
-  webServer: {
-    command: 'npm run dev -- --host 0.0.0.0',
-    url: `http://127.0.0.1:${PORT}`,
-    reuseExistingServer: !process.env.CI,
-  },
   projects: [
     {
       name: 'chromium',
