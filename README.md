@@ -1,6 +1,7 @@
 # Интернет-магазин комплектующих для ПК
 
 [![hexlet-check](https://github.com/Konstantin-Gromakovskiy/test-program-please-ignore-2-middle-frontend-project-426/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/Konstantin-Gromakovskiy/test-program-please-ignore-2-middle-frontend-project-426/actions)
+[![Tests](https://github.com/Konstantin-Gromakovskiy/test-program-please-ignore-2-middle-frontend-project-426/actions/workflows/tests.yml/badge.svg)](https://github.com/Konstantin-Gromakovskiy/test-program-please-ignore-2-middle-frontend-project-426/actions/workflows/tests.yml)
 
 Разработайте fullstack-интернет-магазин комплектующих для ПК целиком на TypeScript:
 фронтенд на любом TS-фреймворке (React, Vue, Svelte, Angular, Solid и др.) и собственный
@@ -10,8 +11,8 @@ TypeSpec → OpenAPI, реализуйте регистрацию и автор�
 историей заказов. Приложение
 деплоится в прод с первого шага и развивается под собственными браузерными тестами.
 
-Учебный проект Хекслета: https://ru.hexlet.io/programs/test-program-please-ignore-2-middle-frontend
-Как это должно работать: https://files.hexlet.app/a/qf7bsq
+Учебный проект Хекслета: <https://ru.hexlet.io/programs/test-program-please-ignore-2-middle-frontend>
+Как это должно работать: <https://files.hexlet.app/a/qf7bsq>
 
 ## Стек
 
