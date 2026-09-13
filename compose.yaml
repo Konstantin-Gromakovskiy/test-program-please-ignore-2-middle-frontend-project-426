@@ -5,6 +5,7 @@ services:
       - "3000:${PORT}"
     environment:
       DATABASE_URL: ${DATABASE_URL}
+      PORT: ${PORT}
     depends_on:
       - database
 
