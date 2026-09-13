@@ -12,3 +12,5 @@ back-install:
 	cd back && npm install
 start: 
 	cd back && npm run start
+test:
+	cd front && npm run test:e2e
