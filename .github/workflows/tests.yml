@@ -8,6 +8,12 @@ jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    env:
+      POSTGRES_DB: computer_store
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      DATABASE_URL: postgresql://user:password@database:5432/computer_store
+      PORT: 3000
     steps:
       - uses: actions/checkout@v4
       - name: Build Docker compose
