@@ -8,7 +8,6 @@ const SENTRY_DSN = process.env["SENTRY_DSN"];
 const NODE_ENV = process.env["NODE_ENV"];
 const PORT = process.env["PORT"];
 
-if (!SENTRY_DSN) throw new Error("SENTRY_DSN is not set");
 if (!NODE_ENV) throw new Error("NODE_ENV is not set");
 if (!PORT) throw new Error("PORT is not set");
 
@@ -18,7 +17,7 @@ function isErrorWithStatusCode(error: unknown): error is ErrorWithStatusCode {
   return error instanceof Error && "statusCode" in error && typeof error.statusCode === "number";
 }
 
-Sentry.init({ dsn: SENTRY_DSN, environment: NODE_ENV });
+if (SENTRY_DSN) Sentry.init({ dsn: SENTRY_DSN, environment: NODE_ENV });
 
 const fastify = Fastify({ logger: true });
 
