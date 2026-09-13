@@ -14,3 +14,10 @@ start:
 	cd back && npm run start
 test:
 	cd front && npm run test:e2e
+
+ # генерация openapi
+compile-open-api:
+	cd contract && npm run compile
+# запуск локального ui scalar
+serve-open-api:
+	cd contract && npm run serve
