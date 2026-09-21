@@ -1,16 +1,18 @@
 import "@typespec/http";
+import "@typespec/openapi";
+import "./auth/auth.tsp";
 
 using Http;
-@service(#{ title: "Widget Service" })
-namespace DemoService;
+using OpenAPI;
 
-scalar Money extends int32;
-
-@error
-model ProblemDetails {
-  type?: url;
-  title: string;
-  status: int32;
-  detail?: string;
-  instance?: url;
-}
+@service(#{ title: "Computer parts store" })
+@server("https://example.com", "Single server endpoint")
+@summary("Это саммари")
+@tagMetadata(
+  "Auth",
+  #{
+    description: "Методы, отвечающие за авторизацию, регистрацию и выход из приложения",
+  }
+)
+@doc("Бекенд сервис магазина комплектующих для пк")
+namespace Main;
