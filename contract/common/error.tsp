@@ -12,22 +12,26 @@ model ProblemDetails {
   instance?: url;
 }
 
+model BadRequestError extends ProblemDetails {
+  @statusCode statusCode: 400;
+}
+
 model UnauthorizedError extends ProblemDetails {
   @statusCode statusCode: 401;
-  ...ProblemDetails;
 }
 
 model ForbiddenError extends ProblemDetails {
   @statusCode statusCode: 403;
-  ...ProblemDetails;
 }
 
 model NotFoundError extends ProblemDetails {
   @statusCode statusCode: 404;
-  ...ProblemDetails;
+}
+
+model ConflictError extends ProblemDetails {
+  @statusCode statusCode: 409;
 }
 
 model InternalServerError extends ProblemDetails {
   @statusCode statusCode: 500;
-  ...ProblemDetails;
 }

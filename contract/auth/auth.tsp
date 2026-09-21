@@ -12,23 +12,30 @@ namespace Main.Auth;
 
 @post
 @route("login")
-op login(@body body: LoginParams):
+op login(@body body: Credentials):
   | {
       @statusCode statusCode: 200;
+      @header("Set-Cookie") setCookie: string;
 
       @body
       body: UserDto;
     }
-  | Error.UnauthorizedError;
+  | Error.UnauthorizedError
+  | Error.BadRequestError;
 
-@useAuth(SessionAutha)
+@useAuth(SessionAuth)
 @post
 @route("logout")
-op logout(): {
-  @statusCode statusCode: 204;
-};
+op logout():
+  | {
+      @header("Set-Cookie")
+      setCookie: "sessions=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0";
 
-@useAuth(SessionAutha)
+      @statusCode statusCode: 204;
+    }
+  | Error.UnauthorizedError;
+
+@useAuth(SessionAuth)
 @get
 @route("me")
 op me():
@@ -39,3 +46,16 @@ op me():
       body: UserDto;
     }
   | Error.UnauthorizedError;
+
+@post
+@route("register")
+op register(@body body: Credentials):
+  | {
+      @statusCode statusCode: 201;
+      @header("Set-Cookie") setCookie: string;
+
+      @body
+      body: UserDto;
+    }
+  | Error.ConflictError
+  | Error.BadRequestError;
