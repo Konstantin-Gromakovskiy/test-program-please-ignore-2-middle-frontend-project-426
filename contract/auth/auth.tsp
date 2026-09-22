@@ -4,6 +4,7 @@ import "../common/sessionAuth.tsp";
 import "@typespec/http";
 
 using Http;
+using OpenAPI;
 
 @doc("Авторизация пользователя")
 @route("auth")
@@ -12,6 +13,7 @@ namespace Main.Auth;
 
 @post
 @route("login")
+@operationId("login")
 op login(@body body: Credentials):
   | {
       @statusCode statusCode: 200;

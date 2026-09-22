@@ -3,6 +3,7 @@ import Fastify from "fastify";
 import routes from "#routes/index";
 import { fastifyStatic } from "@fastify/static";
 import path from "path";
+import glue from "fastify-openapi-glue";
 
 const SENTRY_DSN = process.env["SENTRY_DSN"];
 const NODE_ENV = process.env["NODE_ENV"];
@@ -14,18 +15,35 @@ if (!PORT) throw new Error("PORT is not set");
 type ErrorWithStatusCode = Error & { statusCode: number };
 
 function isErrorWithStatusCode(error: unknown): error is ErrorWithStatusCode {
-  return error instanceof Error && "statusCode" in error && typeof error.statusCode === "number";
+  return (
+    error instanceof Error &&
+    "statusCode" in error &&
+    typeof error.statusCode === "number"
+  );
 }
 
 if (SENTRY_DSN) Sentry.init({ dsn: SENTRY_DSN, environment: NODE_ENV });
 
 const fastify = Fastify({ logger: true });
 const contractRoot = path.resolve(process.cwd(), "../contract");
+const OPENAPI_SPECIFICATION = path.join(
+  contractRoot,
+  "tsp-output/schema/openapi.json",
+);
+console.log(OPENAPI_SPECIFICATION);
+
+fastify.register(glue, {
+  prefix: "/api",
+  specification: OPENAPI_SPECIFICATION,
+  serviceHandlers: routes,
+});
 
 // Backend routes
-fastify.register(routes, { prefix: "/api" });
+// fastify.register(routes, { prefix: "/api" }); -- TODO: удалить как только заработает glue
 fastify.get("/api/openapi.json", (_, reply) => {
-  return reply.type("application/json").sendFile("openapi.json", path.join(contractRoot, "tsp-output/schema"));
+  return reply
+    .type("application/json")
+    .sendFile("openapi.json", path.join(contractRoot, "tsp-output/schema"));
 });
 fastify.get("/api/docs", (_, reply) => {
   return reply.type("text/html").sendFile("index.html", contractRoot);

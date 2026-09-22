@@ -1,20 +1,11 @@
-import type { FastifyPluginAsync } from "fastify";
+import type { RouteHandlers } from "../types/handlers/fastify.gen.ts";
 
-type ErrorCheckParams = {
-  statusCode: string;
-};
+export const errorCheck: RouteHandlers["errorCheck"] = async (request) => {
+  const statusCode = Number(request.params.statusCode);
+  const error = new Error(`Error check: ${statusCode}`) as Error & {
+    statusCode: number;
+  };
 
-export const errorCheck: FastifyPluginAsync = async (fastify) => {
-  fastify.get<{ Params: ErrorCheckParams }>(
-    "/error-check/:statusCode",
-    async (request) => {
-      const statusCode = Number(request.params.statusCode);
-      const error = new Error(`Error check: ${statusCode}`) as Error & {
-        statusCode: number;
-      };
-
-      error.statusCode = statusCode;
-      throw error;
-    },
-  );
+  error.statusCode = statusCode;
+  throw error;
 };

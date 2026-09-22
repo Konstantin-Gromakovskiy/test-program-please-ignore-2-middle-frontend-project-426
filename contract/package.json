@@ -1,11 +1,16 @@
 {
-  "name": "contract",
+  "name": "@pc-store/contract",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "compile": "tsp compile .",
+    "compile": "tsp compile main.tsp",
     "serve": "live-server --port=8080 --no-browser --watch=tsp-output/schema/openapi.json"
+  },
+  "exports": {
+    "./server": {
+      "types": "./tsp-output/server/js/src/generated/models/all/index.ts"
+    }
   },
   "dependencies": {
     "@typespec/compiler": "^1.16.0",

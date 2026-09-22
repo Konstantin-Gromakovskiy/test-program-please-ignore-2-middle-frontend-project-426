@@ -1,7 +1,5 @@
-import type { FastifyPluginAsync } from "fastify";
+import type { RouteHandlers } from "../types/handlers/fastify.gen.ts";
 
-export const healthCheck: FastifyPluginAsync = async (fastify) => {
-  fastify.get("/health-check", async () => {
-    return { status: "ok" };
-  });
+export const healthCheck: RouteHandlers["healthCheck"] = async (_, reply) => {
+  return reply.code(200).send({ status: "ok" });
 };

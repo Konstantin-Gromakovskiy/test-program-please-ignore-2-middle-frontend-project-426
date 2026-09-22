@@ -21,3 +21,9 @@ compile-open-api:
 # запуск локального ui scalar
 serve-open-api:
 	cd contract && npm run serve
+
+# генерация интерфейса api для fastify
+types-to-handlers:
+	 cd back && npm run openapi-ts
+
+types: compile-open-api types-to-handlers
