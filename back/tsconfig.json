@@ -22,7 +22,8 @@
     // Other Outputs
     "sourceMap": true,
     "paths": {
-      "#routes/*": ["./routes/*"]
+      "#routes/*": ["./routes/*"],
+      "#db/*": ["./db/*"]
     },
     // "declaration": true,
     // "declarationMap": true,
