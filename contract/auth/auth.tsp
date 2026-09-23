@@ -28,6 +28,7 @@ op login(@body body: Credentials):
 @useAuth(SessionAuth)
 @post
 @route("logout")
+@operationId("logout")
 op logout():
   | {
       @header("Set-Cookie")
@@ -40,6 +41,7 @@ op logout():
 @useAuth(SessionAuth)
 @get
 @route("me")
+@operationId("me")
 op me():
   | {
       @statusCode statusCode: 200;
@@ -51,6 +53,7 @@ op me():
 
 @post
 @route("register")
+@operationId("register")
 op register(@body body: Credentials):
   | {
       @statusCode statusCode: 201;
