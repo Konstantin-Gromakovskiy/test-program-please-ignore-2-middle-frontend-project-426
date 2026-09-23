@@ -23,7 +23,11 @@
     "sourceMap": true,
     "paths": {
       "#routes/*": ["./routes/*"],
-      "#db/*": ["./db/*"]
+      "#db/*": ["./db/*"],
+      "#domain/*": ["./domain/*"],
+      "#lib/*": ["./lib/*"],
+      "#service/*": ["./services/*"],
+      "#repository/*": ["./repositories/*"]
     },
     // "declaration": true,
     // "declarationMap": true,

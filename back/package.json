@@ -2,7 +2,11 @@
   "type": "module",
   "imports": {
     "#routes/*": "./dist/routes/*.js",
-    "#db/*": "./dist/db/*"
+    "#db/*": "./dist/db/*",
+    "#domain/*": "./dist/domain/*",
+    "#lib/*": "./dist/lib/*",
+    "#service/*": "./dist/services/*",
+    "#repository/*": "./dist/repositories/*"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
