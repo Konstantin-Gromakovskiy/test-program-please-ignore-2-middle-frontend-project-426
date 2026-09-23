@@ -2,22 +2,22 @@
 
 import type { RouteHandler } from 'fastify';
 
-import type { AuthLogoutErrors, AuthLogoutResponses, AuthMeErrors, AuthMeResponses, AuthRegisterData, AuthRegisterErrors, AuthRegisterResponses, ErrorCheckData, ErrorCheckErrors, HealthCheckResponses, LoginData, LoginErrors, LoginResponses } from './types.gen.js';
+import type { ErrorCheckData, ErrorCheckErrors, HealthCheckResponses, LoginData, LoginErrors, LoginResponses, LogoutErrors, LogoutResponses, MeErrors, MeResponses, RegisterData, RegisterErrors, RegisterResponses } from './types.gen.js';
 
 export type RouteHandlers = {
     login: RouteHandler<{
         Body: LoginData['body'];
         Reply: LoginErrors & LoginResponses;
     }>;
-    authLogout: RouteHandler<{
-        Reply: AuthLogoutErrors & AuthLogoutResponses;
+    logout: RouteHandler<{
+        Reply: LogoutErrors & LogoutResponses;
     }>;
-    authMe: RouteHandler<{
-        Reply: AuthMeErrors & AuthMeResponses;
+    me: RouteHandler<{
+        Reply: MeErrors & MeResponses;
     }>;
-    authRegister: RouteHandler<{
-        Body: AuthRegisterData['body'];
-        Reply: AuthRegisterErrors & AuthRegisterResponses;
+    register: RouteHandler<{
+        Body: RegisterData['body'];
+        Reply: RegisterErrors & RegisterResponses;
     }>;
     errorCheck: RouteHandler<{
         Params: ErrorCheckData['path'];

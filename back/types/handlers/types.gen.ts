@@ -79,64 +79,64 @@ export type LoginResponses = {
 
 export type LoginResponse = LoginResponses[keyof LoginResponses];
 
-export type AuthLogoutData = {
+export type LogoutData = {
     body?: never;
     path?: never;
     query?: never;
     url: '/auth/logout';
 };
 
-export type AuthLogoutErrors = {
+export type LogoutErrors = {
     /**
      * Access is unauthorized.
      */
     401: ErrorUnauthorizedError;
 };
 
-export type AuthLogoutError = AuthLogoutErrors[keyof AuthLogoutErrors];
+export type LogoutError = LogoutErrors[keyof LogoutErrors];
 
-export type AuthLogoutResponses = {
+export type LogoutResponses = {
     /**
      * There is no content to send for this request, but the headers may be useful.
      */
     204: void;
 };
 
-export type AuthLogoutResponse = AuthLogoutResponses[keyof AuthLogoutResponses];
+export type LogoutResponse = LogoutResponses[keyof LogoutResponses];
 
-export type AuthMeData = {
+export type MeData = {
     body?: never;
     path?: never;
     query?: never;
     url: '/auth/me';
 };
 
-export type AuthMeErrors = {
+export type MeErrors = {
     /**
      * Access is unauthorized.
      */
     401: ErrorUnauthorizedError;
 };
 
-export type AuthMeError = AuthMeErrors[keyof AuthMeErrors];
+export type MeError = MeErrors[keyof MeErrors];
 
-export type AuthMeResponses = {
+export type MeResponses = {
     /**
      * The request has succeeded.
      */
     200: UserDto;
 };
 
-export type AuthMeResponse = AuthMeResponses[keyof AuthMeResponses];
+export type MeResponse = MeResponses[keyof MeResponses];
 
-export type AuthRegisterData = {
+export type RegisterData = {
     body: Credentials;
     path?: never;
     query?: never;
     url: '/auth/register';
 };
 
-export type AuthRegisterErrors = {
+export type RegisterErrors = {
     /**
      * The server could not understand the request due to invalid syntax.
      */
@@ -147,16 +147,16 @@ export type AuthRegisterErrors = {
     409: ErrorConflictError;
 };
 
-export type AuthRegisterError = AuthRegisterErrors[keyof AuthRegisterErrors];
+export type RegisterError = RegisterErrors[keyof RegisterErrors];
 
-export type AuthRegisterResponses = {
+export type RegisterResponses = {
     /**
      * The request has succeeded and a new resource has been created as a result.
      */
     201: UserDto;
 };
 
-export type AuthRegisterResponse = AuthRegisterResponses[keyof AuthRegisterResponses];
+export type RegisterResponse = RegisterResponses[keyof RegisterResponses];
 
 export type ErrorCheckData = {
     body?: never;
