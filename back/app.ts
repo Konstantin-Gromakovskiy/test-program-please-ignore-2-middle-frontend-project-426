@@ -39,7 +39,6 @@ fastify.register(glue, {
 });
 
 // Backend routes
-// fastify.register(routes, { prefix: "/api" }); -- TODO: удалить как только заработает glue
 fastify.get("/api/openapi.json", (_, reply) => {
   return reply
     .type("application/json")
