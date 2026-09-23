@@ -6,7 +6,7 @@ export class SessionRepository {
   constructor(private readonly db: Db) {}
 
   async createSession(newSessionData: NewSession) {
-    const session = await this.db
+    const [session] = await this.db
       .insert(sessions)
       .values(newSessionData)
       .returning();

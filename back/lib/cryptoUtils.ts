@@ -1,11 +1,23 @@
-import { randomBytes, scrypt, timingSafeEqual } from "node:crypto";
+import { createHash, randomBytes, scrypt, timingSafeEqual } from "node:crypto";
 import { promisify } from "node:util";
 
 const scryptAsync = promisify(scrypt);
 
-export const passwordHasher = {
+export const cryptoUtils = {
+  generateRandomHex(bytes: number): string {
+    return randomBytes(bytes).toString("hex");
+  },
+
+  generateSessionToken(): string {
+    return this.generateRandomHex(32);
+  },
+
+  hashSessionToken(token: string): string {
+    return createHash("sha256").update(token).digest("hex");
+  },
+
   async hash(password: string): Promise<string> {
-    const salt = randomBytes(16).toString("hex");
+    const salt = this.generateRandomHex(16);
 
     const hash = (await scryptAsync(password, salt, 64)) as Buffer;
 

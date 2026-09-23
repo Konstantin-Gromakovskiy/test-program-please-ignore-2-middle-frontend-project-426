@@ -5,14 +5,24 @@ export const createAuthHandlers = (AuthService: AuthService) =>
   defineHandlers({
     login: async (request, reply) => {
       const { email, password } = request.body;
-      const user = await AuthService.login(email, password);
-      if (!user)
+      const userData = await AuthService.login(email, password);
+      if (!userData)
         return reply
           .code(401)
           .send({ title: "Incorrect email or password", status: 401 });
 
+      const { tokenData, user } = userData;
+
+      reply.setCookie("session", tokenData.token, {
+        httpOnly: true,
+        expires: tokenData.expiresAt,
+        path: "/",
+        secure: process.env?.["NODE_ENV"] === "production",
+        sameSite: "lax",
+      });
       reply.code(200).send(user);
     },
+
     register: async (request, reply) => {
       const { email, password } = request.body;
       const user = await AuthService.register({ email, password });

@@ -1,9 +1,11 @@
 import * as Sentry from "@sentry/node";
 import Fastify from "fastify";
-import { serviceHandlers } from "./composition.js";
+import { securityHandlers, serviceHandlers } from "./composition.js";
 import { fastifyStatic } from "@fastify/static";
 import path from "path";
 import glue from "fastify-openapi-glue";
+import cookie from "@fastify/cookie";
+import { BaseError } from "./lib/errors.js";
 
 const SENTRY_DSN = process.env["SENTRY_DSN"];
 const NODE_ENV = process.env["NODE_ENV"];
@@ -30,11 +32,11 @@ const OPENAPI_SPECIFICATION = path.join(
   contractRoot,
   "tsp-output/schema/openapi.json",
 );
-console.log(OPENAPI_SPECIFICATION);
 
-fastify.register(glue, {
+fastify.register(cookie).register(glue, {
   specification: OPENAPI_SPECIFICATION,
   serviceHandlers,
+  securityHandlers,
 });
 
 // Backend routes
@@ -58,19 +60,35 @@ fastify.setNotFoundHandler((request, reply) => {
   return reply.sendFile("index.html");
 });
 
-fastify.setErrorHandler((error, _, reply) => {
-  const statusCode = isErrorWithStatusCode(error) ? error.statusCode : 500;
+fastify.setErrorHandler((error, request, reply) => {
+  if (error instanceof BaseError) {
+    return reply.status(error.status).type("application/problem+json").send({
+      type: error.type,
+      title: error.title,
+      status: error.status,
+      detail: error.detail,
+      instance: request.url,
+    });
+  }
 
-  if (statusCode >= 500) Sentry.captureException(error);
+  if (isErrorWithStatusCode(error)) {
+    return reply.status(error.statusCode).type("application/problem+json").send({
+      type: "about:blank",
+      title: error.name,
+      status: error.statusCode,
+      detail: error.message,
+      instance: request.url,
+    });
+  }
 
-  const errorMessage =
-    statusCode >= 500
-      ? "Internal Server Error"
-      : error instanceof Error
-        ? error.message
-        : "Request failed";
+  request.log.error(error);
 
-  reply.code(statusCode).send({ error: errorMessage });
+  return reply.status(500).type("application/problem+json").send({
+    type: "about:blank",
+    title: "Internal Server Error",
+    status: 500,
+    instance: request.url,
+  });
 });
 
 fastify.listen({ host: "0.0.0.0", port: Number(PORT) }, (err, address) => {
