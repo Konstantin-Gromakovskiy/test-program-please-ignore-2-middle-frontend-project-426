@@ -32,7 +32,7 @@ op login(@body body: Credentials):
 op logout():
   | {
       @header("Set-Cookie")
-      setCookie: "sessions=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0";
+      setCookie: "session=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0";
 
       @statusCode statusCode: 204;
     }
