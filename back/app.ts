@@ -1,6 +1,6 @@
 import * as Sentry from "@sentry/node";
 import Fastify from "fastify";
-import routes from "#routes/index";
+import { serviceHandlers } from "./composition.js";
 import { fastifyStatic } from "@fastify/static";
 import path from "path";
 import glue from "fastify-openapi-glue";
@@ -35,7 +35,7 @@ console.log(OPENAPI_SPECIFICATION);
 fastify.register(glue, {
   prefix: "/api",
   specification: OPENAPI_SPECIFICATION,
-  serviceHandlers: routes,
+  serviceHandlers,
 });
 
 // Backend routes

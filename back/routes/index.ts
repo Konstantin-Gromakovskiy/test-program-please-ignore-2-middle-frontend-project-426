@@ -2,17 +2,18 @@ import { errorCheck } from "./error-check.js";
 import { healthCheck } from "./health-check.js";
 import { createAuthHandlers } from "./auth.js";
 import type { RouteHandlers } from "../types/handlers/fastify.gen.ts";
-import { AuthService } from "#service/index.js";
-import { UserRepository } from "#repository/index.js";
-import { db } from "#db/index.js";
+import type { AuthService } from "#service/index.js";
 
-const userRepository = new UserRepository(db);
-const authService = new AuthService(userRepository);
+export function createRouteHandlers({
+  authService,
+}: {
+  authService: AuthService;
+}) {
+  const handlers: RouteHandlers = {
+    ...createAuthHandlers(authService),
+    healthCheck,
+    errorCheck,
+  };
 
-const routes: RouteHandlers = {
-  ...createAuthHandlers(authService),
-  healthCheck,
-  errorCheck,
-};
-
-export default routes;
+  return handlers;
+}
