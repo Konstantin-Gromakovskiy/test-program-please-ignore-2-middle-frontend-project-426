@@ -33,7 +33,6 @@ const OPENAPI_SPECIFICATION = path.join(
 console.log(OPENAPI_SPECIFICATION);
 
 fastify.register(glue, {
-  prefix: "/api",
   specification: OPENAPI_SPECIFICATION,
   serviceHandlers,
 });
