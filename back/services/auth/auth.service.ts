@@ -47,6 +47,13 @@ class AuthService {
     };
   }
 
+  async logout(token: string) {
+    const tokenHash = this.cryptoUtils.hashSessionToken(token);
+
+    const sessionData = await this.sessionRepository.deleteSession(tokenHash);
+    return sessionData;
+  }
+
   async validateSession(token: string) {
     const session = await this.sessionRepository.getSessionByToken(
       this.cryptoUtils.hashSessionToken(token),

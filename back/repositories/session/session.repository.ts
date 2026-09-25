@@ -24,10 +24,10 @@ export class SessionRepository {
     return session?.[0];
   }
 
-  async deleteSession(session: Session): Promise<Session | undefined> {
+  async deleteSession(tokenHash: string): Promise<Session | undefined> {
     const [deletedSession] = await this.db
       .delete(sessions)
-      .where(eq(sessions.id, session.id))
+      .where(eq(sessions.tokenHash, tokenHash))
       .returning();
 
     return deletedSession;

@@ -1,5 +1,6 @@
 import { defineHandlers } from "../lib/utils.js";
 import { AuthService } from "#service/index.js";
+import { UnauthorizedError } from "#lib/errors.js";
 
 export const createAuthHandlers = (AuthService: AuthService) =>
   defineHandlers({
@@ -28,8 +29,12 @@ export const createAuthHandlers = (AuthService: AuthService) =>
       const user = await AuthService.register({ email, password });
       reply.code(201).send(user);
     },
-    logout: async (_, reply) => {
-      reply.code(204).send();
+    logout: async (request, reply) => {
+      const token = request.cookies["session"];
+      if (!token) throw new UnauthorizedError("No session cookie");
+      const sessionData = await AuthService.logout(token);
+      if (!sessionData) throw new UnauthorizedError("Invalid session token");
+      return reply.clearCookie("session", { path: "/" }).code(204).send();
     },
     me: async (_, reply) => {
       reply.code(200).send({
