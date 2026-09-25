@@ -18,4 +18,13 @@ export class UserRepository {
 
     return user;
   }
+
+  async getUserById(id: User["id"]): Promise<User | undefined> {
+    const [user] = await this.db
+      .select()
+      .from(users)
+      .where(eq(users.id, id));
+
+    return user;
+  }
 }

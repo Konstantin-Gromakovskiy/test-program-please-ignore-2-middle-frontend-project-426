@@ -3,6 +3,7 @@ import type { NewUser, User } from "#domain/user/types.js";
 export interface UserRepository {
   createUser(userData: NewUser): Promise<User>;
   getUserByEmail(email: User["email"]): Promise<User | undefined>;
+  getUserById(id: User["id"]): Promise<User | undefined>;
 }
 
 export interface CryptoUtils {

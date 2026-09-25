@@ -54,6 +54,15 @@ class AuthService {
     return sessionData;
   }
 
+  async getCurrentUser(token: string) {
+    const session = await this.validateSession(token);
+    const user = await this.userRepository.getUserById(session.userId);
+
+    if (!user) throw new UnauthorizedError("Invalid session user");
+
+    return user;
+  }
+
   async validateSession(token: string) {
     const session = await this.sessionRepository.getSessionByToken(
       this.cryptoUtils.hashSessionToken(token),

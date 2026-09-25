@@ -36,10 +36,11 @@ export const createAuthHandlers = (AuthService: AuthService) =>
       if (!sessionData) throw new UnauthorizedError("Invalid session token");
       return reply.clearCookie("session", { path: "/" }).code(204).send();
     },
-    me: async (_, reply) => {
-      reply.code(200).send({
-        id: "50c20776-1509-4a95-8bdb-80bf76fc6ad7",
-        email: "test@test.com",
-      });
+    me: async (request, reply) => {
+      const token = request.cookies["session"];
+      if (!token) throw new UnauthorizedError("No session cookie");
+
+      const user = await AuthService.getCurrentUser(token);
+      return reply.code(200).send(user);
     },
   });

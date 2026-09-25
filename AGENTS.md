@@ -18,3 +18,7 @@
 
 - Docker builds frontend, TypeSpec/OpenAPI, and backend independently, then serves the frontend static build and `/api/openapi.json` from the Fastify container. Use `docker compose up --build` for the integrated app.
 - `front/vite.config.ts` sets `envDir: '../.'`; frontend environment variables come from the repository root and must use the `VITE_` prefix.
+
+## Commits
+
+- Use Conventional Commits with a Russian summary, for example: `feat: добавить проверку сессии`.
