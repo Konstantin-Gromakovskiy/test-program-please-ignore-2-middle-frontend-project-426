@@ -7,7 +7,7 @@ import { routes } from "@/shared/config";
 
 export const Route = createRootRoute({
   component: () => (
-    <>
+    <Box mih="100svh" display="flex" style={{ flexDirection: "column" }}>
       <Box
         component="header"
         py="xs"
@@ -36,12 +36,12 @@ export const Route = createRootRoute({
           </Group>
         </Container>
       </Box>
-      <main>
-        <Container size={1126}>
+      <main style={{ flex: 1, minHeight: 0, display: "flex" }}>
+        <Container size={1126} style={{ flex: 1 }}>
           <Outlet />
         </Container>
       </main>
       <TanStackRouterDevtools />
-    </>
+    </Box>
   ),
 });
