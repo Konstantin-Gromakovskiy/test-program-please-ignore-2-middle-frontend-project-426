@@ -14,7 +14,7 @@ export const Route = createRootRoute({
         })}
       >
         {" "}
-        <Container>
+        <Container size={1126}>
           <Group justify="space-between" align="center">
             <img src={viteLogo} alt="logo" width={30} />
             <Group>
@@ -27,12 +27,18 @@ export const Route = createRootRoute({
             </Group>
             <Group>
               <Button>Вход</Button>
-              <Button variant="outline">Регистрация</Button>
+              <Button component={Link} to="/register" variant="outline">
+                Регистрация
+              </Button>
             </Group>
           </Group>
         </Container>
       </Box>
-      <Outlet />
+      <main>
+        <Container size={1126}>
+          <Outlet />
+        </Container>
+      </main>
     </>
   ),
 });

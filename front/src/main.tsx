@@ -1,28 +1,11 @@
-import * as Sentry from "@sentry/react";
-import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "./index.css";
-import { RouterProvider, createRouter } from "@tanstack/react-router";
-import { routeTree } from "./routeTree.gen";
-import { MantineProvider } from "@mantine/core";
-import "@mantine/core/styles.css";
-const SENTRY_DSN = import.meta.env["VITE_SENTRY_DSN"] as string;
 
-if (SENTRY_DSN)
-  Sentry.init({ dsn: SENTRY_DSN, environment: import.meta.env.MODE });
+import { AppProviders } from "@/app/composition/AppProviders";
+import { initSentry } from "@/app/init/sentry";
+import "@/app/styles/index.css";
 
-const router = createRouter({ routeTree });
-
-declare module "@tanstack/react-router" {
-  interface Register {
-    router: typeof router;
-  }
-}
+initSentry();
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <MantineProvider>
-      <RouterProvider router={router} />
-    </MantineProvider>
-  </StrictMode>,
+  <AppProviders />,
 );
