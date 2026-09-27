@@ -15,7 +15,6 @@ export const Route = createRootRoute({
           boxShadow: theme.shadows.sm,
         })}
       >
-        {" "}
         <Container size={1126}>
           <Group justify="space-between" align="center">
             <img src={viteLogo} alt="logo" width={30} />
