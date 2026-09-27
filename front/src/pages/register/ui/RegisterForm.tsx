@@ -17,7 +17,18 @@ import { registerFormValidation } from "../lib/validation";
 import { useRegisterMutation } from "../lib/register.api.ts";
 
 export function RegisterForm() {
-  const { mutateAsync: register, isPending } = useRegisterMutation();
+  const { mutate: register, isPending } = useRegisterMutation({
+    onError: (error) => {
+      notifications.show({
+        color: "red",
+        message:
+          error.status === 409
+            ? "Пользователь с таким email уже существует."
+            : "Не удалось зарегистрироваться. Попробуйте еще раз.",
+      });
+    },
+    onSuccess: async () => await navigate({ to: routes.login }),
+  });
   const navigate = useNavigate({ from: routes.register });
 
   const [hasValidationErrors, setHasValidationErrors] = useState(false);
@@ -31,16 +42,8 @@ export function RegisterForm() {
     validate: registerFormValidation,
   });
 
-  async function handleSubmit({ email, password }: typeof form.values) {
-    try {
-      await register({ body: { email, password } });
-      await navigate({ to: routes.login });
-    } catch {
-      notifications.show({
-        color: "red",
-        message: "Не удалось зарегистрироваться. Попробуйте еще раз.",
-      });
-    }
+  function handleSubmit({ email, password }: typeof form.values) {
+    register({ body: { email, password } });
   }
 
   return (
