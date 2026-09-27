@@ -9,7 +9,8 @@
     "test:e2e": "playwright test",
     "lint": "eslint .",
     "lint:fsd": "steiger ./src",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "ts-check": "tsc -b"
   },
   "dependencies": {
     "@mantine/core": "^9.6.3",
@@ -24,6 +25,9 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@feature-sliced/steiger-plugin": "^0.8.0",
+    "@hey-api/client-fetch": "^0.13.1",
+    "@hey-api/openapi-ts": "0.99.0",
+    "@hey-api/vite-plugin": "0.3.2",
     "@playwright/test": "^1.63.0",
     "@tanstack/router-plugin": "^1.168.40",
     "@types/node": "^24.13.3",
