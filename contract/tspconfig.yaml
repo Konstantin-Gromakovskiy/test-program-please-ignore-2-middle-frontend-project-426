@@ -10,14 +10,6 @@ options:
     openapi-versions:
       - 3.1.0
     file-type: json
-  "@typespec/http-client-js":
-    emitter-output-dir: "{output-dir}/clients/js"
-  "@typespec/http-server-js":
-    emitter-output-dir: "{output-dir}/server/js"
-  "@typespec/json-schema":
-    emitter-output-dir: "{output-dir}/json-schema"
-    file-type: json
-    emitAllModels: true
 
 # entrypoint: main.tsp                           # Main TypeSpec file (default: main.tsp)
 # extends: ../tspconfig.yaml                     # Extend another config file
