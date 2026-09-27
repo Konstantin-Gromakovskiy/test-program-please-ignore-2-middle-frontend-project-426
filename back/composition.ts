@@ -4,7 +4,18 @@ import { UnauthorizedError } from "#lib/errors.js";
 import { SessionRepository, UserRepository } from "#repository/index.js";
 import { AuthService } from "#service/index.js";
 import { createRouteHandlers } from "./routes/index.js";
-import type { FastifyRequest } from "fastify";
+import { BaseError } from "./lib/errors.js";
+import type { FastifyInstance, FastifyRequest } from "fastify";
+
+type ErrorWithStatusCode = Error & { statusCode: number };
+
+function isErrorWithStatusCode(error: unknown): error is ErrorWithStatusCode {
+  return (
+    error instanceof Error &&
+    "statusCode" in error &&
+    typeof error.statusCode === "number"
+  );
+}
 
 const userRepository = new UserRepository(db);
 const sessionRepository = new SessionRepository(db);
@@ -24,3 +35,36 @@ export const securityHandlers = {
     await authService.validateSession(token);
   },
 };
+
+export function configureErrorHandler(fastify: FastifyInstance) {
+  fastify.setErrorHandler((error, request, reply) => {
+    if (error instanceof BaseError) {
+      return reply.status(error.status).type("application/problem+json").send({
+        type: error.type,
+        title: error.title,
+        status: error.status,
+        detail: error.detail,
+        instance: request.url,
+      });
+    }
+
+    if (isErrorWithStatusCode(error)) {
+      return reply.status(error.statusCode).type("application/problem+json").send({
+        type: "about:blank",
+        title: error.name,
+        status: error.statusCode,
+        detail: error.message,
+        instance: request.url,
+      });
+    }
+
+    request.log.error(error);
+
+    return reply.status(500).type("application/problem+json").send({
+      type: "about:blank",
+      title: "Internal Server Error",
+      status: 500,
+      instance: request.url,
+    });
+  });
+}

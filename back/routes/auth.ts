@@ -1,6 +1,7 @@
 import { defineHandlers } from "../lib/utils.js";
 import { AuthService } from "#service/index.js";
-import { UnauthorizedError } from "#lib/errors.js";
+import { ConflictError, UnauthorizedError } from "#lib/errors.js";
+import { UniqueConstraintError } from "#domain/errors/index.js";
 
 export const createAuthHandlers = (AuthService: AuthService) =>
   defineHandlers({
@@ -26,7 +27,14 @@ export const createAuthHandlers = (AuthService: AuthService) =>
 
     register: async (request, reply) => {
       const { email, password } = request.body;
-      const user = await AuthService.register({ email, password });
+      let user;
+      try {
+        user = await AuthService.register({ email, password });
+      } catch (error) {
+        if (error instanceof UniqueConstraintError)
+          throw new ConflictError("Email is already registered");
+        throw error;
+      }
       reply.code(201).send(user);
     },
     logout: async (request, reply) => {
