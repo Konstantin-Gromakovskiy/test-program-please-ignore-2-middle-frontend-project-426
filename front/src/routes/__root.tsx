@@ -1,5 +1,6 @@
 import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
 import { Anchor, Container, Group, Box, Button } from "@mantine/core";
+import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
 import viteLogo from "@/assets/hero.png";
 
@@ -39,6 +40,7 @@ export const Route = createRootRoute({
           <Outlet />
         </Container>
       </main>
+      <TanStackRouterDevtools />
     </>
   ),
 });
