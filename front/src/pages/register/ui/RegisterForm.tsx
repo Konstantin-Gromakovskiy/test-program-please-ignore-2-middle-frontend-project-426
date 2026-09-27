@@ -12,12 +12,13 @@ import {
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { Link, useNavigate } from "@tanstack/react-router";
+import { routes } from "@/shared/config";
 import { registerFormValidation } from "../lib/validation";
 import { useRegisterMutation } from "../lib/register.api.ts";
 
 export function RegisterForm() {
   const { mutateAsync: register, isPending } = useRegisterMutation();
-  const navigate = useNavigate({ from: "/register" });
+  const navigate = useNavigate({ from: routes.register });
 
   const [hasValidationErrors, setHasValidationErrors] = useState(false);
   const form = useForm({
@@ -33,7 +34,7 @@ export function RegisterForm() {
   async function handleSubmit({ email, password }: typeof form.values) {
     try {
       await register({ body: { email, password } });
-      await navigate({ to: "/login" });
+      await navigate({ to: routes.login });
     } catch {
       notifications.show({
         color: "red",
@@ -79,7 +80,7 @@ export function RegisterForm() {
         </form>
         <Text ta="center" size="sm">
           Уже есть аккаунт?{" "}
-          <Anchor component={Link} to="/login">
+          <Anchor component={Link} to={routes.login}>
             Войти
           </Anchor>
         </Text>

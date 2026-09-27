@@ -3,6 +3,7 @@ import { Anchor, Container, Group, Box, Button } from "@mantine/core";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
 import viteLogo from "@/assets/hero.png";
+import { routes } from "@/shared/config";
 
 export const Route = createRootRoute({
   component: () => (
@@ -19,16 +20,16 @@ export const Route = createRootRoute({
           <Group justify="space-between" align="center">
             <img src={viteLogo} alt="logo" width={30} />
             <Group>
-              <Anchor component={Link} to="/">
+              <Anchor component={Link} to={routes.home}>
                 Каталог
               </Anchor>
-              <Anchor component={Link} to="/about">
+              <Anchor component={Link} to={routes.about}>
                 Корзина
               </Anchor>
             </Group>
             <Group>
               <Button>Вход</Button>
-              <Button component={Link} to="/register" variant="outline">
+              <Button component={Link} to={routes.register} variant="outline">
                 Регистрация
               </Button>
             </Group>
