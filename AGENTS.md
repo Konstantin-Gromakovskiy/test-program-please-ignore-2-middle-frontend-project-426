@@ -22,3 +22,17 @@
 ## Commits
 
 - Use Conventional Commits with a Russian summary, for example: `feat: добавить проверку сессии`.
+
+## Agent skills
+
+### Issue tracker
+
+Задачи ведутся в GitHub Issues этого репозитория. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Используются стандартные triage-метки. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Используется single-context layout. See `docs/agents/domain.md`.
