@@ -31,8 +31,9 @@ export const createAuthHandlers = (AuthService: AuthService) =>
       try {
         user = await AuthService.register({ email, password });
       } catch (error) {
-        if (error instanceof UniqueConstraintError)
+        if (error instanceof UniqueConstraintError) {
           throw new ConflictError("Email is already registered");
+        }
         throw error;
       }
       reply.code(201).send(user);
