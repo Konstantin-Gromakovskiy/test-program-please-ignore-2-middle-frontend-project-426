@@ -20,6 +20,7 @@ Frontend code uses Feature-Sliced Design (FSD). When adding or changing function
 - Import another slice through its public API, normally its `index.ts`, rather than reaching into its internal files.
 - Keep components, hooks, API calls, types, and tests close to the slice or segment they belong to.
 - Put code in `shared` only when it is genuinely reusable and has no domain-specific business logic.
+- Keep helper functions and code not directly responsible for rendering or component behavior in the slice's `lib/` segment.
 
 ## Existing Structure
 
