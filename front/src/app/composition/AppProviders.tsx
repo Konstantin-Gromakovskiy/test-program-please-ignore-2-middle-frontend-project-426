@@ -6,7 +6,9 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { router } from "../router";
 import "@mantine/core/styles.css";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { retry: false } },
+});
 
 export function AppProviders() {
   return (
