@@ -28,7 +28,9 @@ export const Route = createRootRoute({
               </Anchor>
             </Group>
             <Group>
-              <Button>Вход</Button>
+              <Button component={Link} to={routes.login}>
+                Вход
+              </Button>
               <Button component={Link} to={routes.register} variant="outline">
                 Регистрация
               </Button>
