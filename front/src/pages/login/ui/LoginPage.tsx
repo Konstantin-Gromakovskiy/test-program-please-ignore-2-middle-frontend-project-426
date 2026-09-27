@@ -1,14 +1,10 @@
-import { Paper, Text, Title } from "@mantine/core";
+import { Center } from "@mantine/core";
+import { LoginForm } from "./LoginForm";
 
 export function LoginPage() {
   return (
-    <Paper withBorder shadow="sm" p="xl" maw={420} mx="auto" mt="xl">
-      <Title order={1} ta="center">
-        Вход
-      </Title>
-      <Text ta="center" mt="md">
-        Форма входа появится позже.
-      </Text>
-    </Paper>
+    <Center h="100%" w="100%">
+      <LoginForm />
+    </Center>
   );
 }
