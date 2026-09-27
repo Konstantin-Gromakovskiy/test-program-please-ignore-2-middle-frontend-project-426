@@ -10,10 +10,15 @@ import {
   Title,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-
+import { notifications } from "@mantine/notifications";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { registerFormValidation } from "../lib/validation";
+import { useRegisterMutation } from "../lib/register.api.ts";
 
 export function RegisterForm() {
+  const { mutateAsync: register, isPending } = useRegisterMutation();
+  const navigate = useNavigate({ from: "/register" });
+
   const [hasValidationErrors, setHasValidationErrors] = useState(false);
   const form = useForm({
     initialValues: {
@@ -25,6 +30,18 @@ export function RegisterForm() {
     validate: registerFormValidation,
   });
 
+  async function handleSubmit({ email, password }: typeof form.values) {
+    try {
+      await register({ body: { email, password } });
+      await navigate({ to: "/login" });
+    } catch {
+      notifications.show({
+        color: "red",
+        message: "Не удалось зарегистрироваться. Попробуйте еще раз.",
+      });
+    }
+  }
+
   return (
     <Paper withBorder shadow="sm" p="xl" w="100%" maw={420}>
       <Stack>
@@ -32,9 +49,8 @@ export function RegisterForm() {
           Регистрация
         </Title>
         <form
-          onSubmit={form.onSubmit(
-            () => {},
-            () => setHasValidationErrors(true),
+          onSubmit={form.onSubmit(handleSubmit, () =>
+            setHasValidationErrors(true),
           )}
         >
           <Stack>
@@ -56,11 +72,16 @@ export function RegisterForm() {
               autoComplete="new-password"
               {...form.getInputProps("confirmPassword")}
             />
-            <Button type="submit">Зарегистрироваться</Button>
+            <Button type="submit" loading={isPending}>
+              Зарегистрироваться
+            </Button>
           </Stack>
         </form>
         <Text ta="center" size="sm">
-          Уже есть аккаунт? <Anchor href="/login">Войти</Anchor>
+          Уже есть аккаунт?{" "}
+          <Anchor component={Link} to="/login">
+            Войти
+          </Anchor>
         </Text>
       </Stack>
     </Paper>

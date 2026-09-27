@@ -1,10 +1,12 @@
 import { StrictMode } from "react";
 import { MantineProvider } from "@mantine/core";
+import { Notifications } from "@mantine/notifications";
 import { RouterProvider } from "@tanstack/react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { router } from "../router";
 import "@mantine/core/styles.css";
+import "@mantine/notifications/styles.css";
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: false } },
@@ -15,6 +17,7 @@ export function AppProviders() {
     <StrictMode>
       <MantineProvider>
         <QueryClientProvider client={queryClient}>
+          <Notifications />
           <RouterProvider router={router} />
           <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>
