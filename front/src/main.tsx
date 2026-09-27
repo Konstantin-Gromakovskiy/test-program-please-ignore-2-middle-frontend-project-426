@@ -4,7 +4,8 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
-
+import { MantineProvider } from "@mantine/core";
+import "@mantine/core/styles.css";
 const SENTRY_DSN = import.meta.env["VITE_SENTRY_DSN"] as string;
 
 if (SENTRY_DSN)
@@ -20,6 +21,8 @@ declare module "@tanstack/react-router" {
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <MantineProvider>
+      <RouterProvider router={router} />
+    </MantineProvider>
   </StrictMode>,
 );
