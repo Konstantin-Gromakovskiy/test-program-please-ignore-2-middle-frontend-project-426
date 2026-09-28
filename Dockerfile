@@ -1,3 +1,12 @@
+FROM node:24-alpine AS contract-builder
+WORKDIR /app/contract
+
+COPY contract/package*.json ./
+RUN npm ci
+COPY contract/ ./
+RUN npm run compile
+
+
 FROM node:24-alpine AS front-builder
 WORKDIR /app/front
 
@@ -7,16 +16,8 @@ ENV VITE_SENTRY_DSN=$VITE_SENTRY_DSN
 COPY front/package*.json ./
 RUN npm ci
 COPY front/ ./
+COPY --from=contract-builder /app/contract/tsp-output/schema/openapi.json ../contract/tsp-output/schema/openapi.json
 RUN npm run build
-
-
-FROM node:24-alpine AS contract-builder
-WORKDIR /app/contract
-
-COPY contract/package*.json ./
-RUN npm ci
-COPY contract/ ./
-RUN npm run compile
 
 
 FROM node:24-alpine AS back-builder
