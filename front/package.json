@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "test:e2e": "playwright test",
     "lint": "eslint .",
     "lint:fsd": "steiger ./src",
     "preview": "vite preview",
@@ -31,7 +30,6 @@
     "@hey-api/client-fetch": "^0.13.1",
     "@hey-api/openapi-ts": "0.99.0",
     "@hey-api/vite-plugin": "0.3.2",
-    "@playwright/test": "^1.63.0",
     "@tanstack/eslint-plugin-query": "^5.104.0",
     "@tanstack/router-plugin": "^1.168.40",
     "@types/node": "^24.13.3",

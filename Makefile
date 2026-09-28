@@ -13,7 +13,7 @@ back-install:
 start: 
 	cd back && npm run start
 test:
-	cd front && npm run test:e2e
+	cd e2e && npm test
 
  # генерация openapi
 compile-open-api:

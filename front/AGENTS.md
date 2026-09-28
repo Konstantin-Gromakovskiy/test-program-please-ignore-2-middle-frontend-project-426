@@ -33,6 +33,5 @@ Run commands from the `front/` directory:
 - `npm run lint` - run ESLint for the frontend source and configuration files.
 - `npm run lint:fsd` - run Steiger to validate Feature-Sliced Design structure and imports.
 - `npm run build` - run the TypeScript project build and create the production Vite bundle.
-- `npm run test:e2e` - run Playwright end-to-end tests.
 
-For frontend changes, run at least `npm run lint`, `npm run lint:fsd`, and `npm run build`. Run `npm run test:e2e` when changing user flows, routing, or integration behavior.
+For frontend changes, run at least `npm run lint`, `npm run lint:fsd`, and `npm run build`.

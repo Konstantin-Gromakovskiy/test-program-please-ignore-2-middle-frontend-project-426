@@ -2,10 +2,10 @@
 
 ## Packages and Commands
 
-- This is three independent npm packages with separate lockfiles: `front/` (React/Vite), `back/` (Fastify/Drizzle), and `contract/` (TypeSpec). Install dependencies in the package being changed; there is no root npm workspace.
+- This is four independent npm packages with separate lockfiles: `front/` (React/Vite), `back/` (Fastify/Drizzle), `contract/` (TypeSpec), and `e2e/` (Playwright). Install dependencies in the package being changed; there is no root npm workspace.
 - Backend development loads the root `.env`: `make back-dev` runs `node --env-file=../.env --import tsx --watch app.ts`. `PORT`, `NODE_ENV`, and `DATABASE_URL` are required; Drizzle also reads `../.env`.
 - Focused checks: `make front-build`, `make back-build`, and `cd front && npm run lint`.
-- `make test` only runs Playwright E2E tests. Match CI locally by running `docker compose up --build -d`, `make front-install`, and `npx playwright install chromium` first. The app health endpoint is `/api/health-check`.
+- `make test` only runs Playwright E2E tests. Match CI locally by running `docker compose up --build -d`, `npm --prefix e2e install`, and `npm --prefix e2e exec playwright install chromium` first. The app health endpoint is `/api/health-check`.
 - Drizzle schema is `back/db/schemes/index.ts`; use `cd back && npm run db:generate`, `db:migrate`, or `db:push` with a valid root `DATABASE_URL`.
 
 ## API Contract and Backend

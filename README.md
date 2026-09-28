@@ -66,6 +66,7 @@ docker compose up --build
 npm --prefix front install
 npm --prefix back install
 npm --prefix contract install
+npm --prefix e2e install
 ```
 
 В отдельных терминалах запустите frontend и backend:
@@ -73,6 +74,13 @@ npm --prefix contract install
 ```bash
 make front-dev
 make back-dev
+```
+
+E2E-тесты находятся в `e2e/` и запускаются против приложения на порту из `PORT`:
+
+```bash
+npm --prefix e2e exec playwright install chromium
+make test
 ```
 
 Перед запуском backend создайте и заполните `.env`, как описано выше. Для генерации OpenAPI после
