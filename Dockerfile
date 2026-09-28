@@ -25,6 +25,8 @@ WORKDIR /app/back
 COPY back/package*.json ./
 RUN npm ci
 COPY back/ ./
+COPY --from=contract-builder /app/contract/tsp-output/schema/openapi.json ../contract/tsp-output/schema/openapi.json
+RUN npm run openapi-ts
 RUN npm run build
 
 
