@@ -27,10 +27,15 @@ export const Route = createRootRoute({
               </Anchor>
             </Group>
             <Group>
-              <Button component={Link} to={routes.login}>
+              <Button component={Link} to={routes.login} data-testid="nav-signin">
                 Вход
               </Button>
-              <Button component={Link} to={routes.register} variant="outline">
+              <Button
+                component={Link}
+                to={routes.register}
+                variant="outline"
+                data-testid="nav-signup"
+              >
                 Регистрация
               </Button>
             </Group>

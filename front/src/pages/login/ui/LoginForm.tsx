@@ -20,10 +20,13 @@ export function LoginForm() {
     onError: (error) => {
       notifications.show({
         color: "red",
-        message:
-          error.status === 401
-            ? "Неверный email или пароль."
-            : "Не удалось войти. Попробуйте еще раз.",
+        message: (
+          <span data-testid="auth-error">
+            {error.status === 401
+              ? "Неверный email или пароль."
+              : "Не удалось войти. Попробуйте еще раз."}
+          </span>
+        ),
       });
     },
     onSuccess: async () => await navigate({ to: routes.home }),
@@ -54,14 +57,16 @@ export function LoginForm() {
               type="email"
               autoFocus
               autoComplete="email"
+              data-testid="auth-email"
               {...form.getInputProps("email")}
             />
             <PasswordInput
               label="Пароль"
               autoComplete="current-password"
+              data-testid="auth-password"
               {...form.getInputProps("password")}
             />
-            <Button type="submit" loading={isPending}>
+            <Button type="submit" loading={isPending} data-testid="auth-submit">
               Войти
             </Button>
           </Stack>

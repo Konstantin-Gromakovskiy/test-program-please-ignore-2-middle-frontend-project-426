@@ -21,10 +21,13 @@ export function RegisterForm() {
     onError: (error) => {
       notifications.show({
         color: "red",
-        message:
-          error.status === 409
-            ? "Пользователь с таким email уже существует."
-            : "Не удалось зарегистрироваться. Попробуйте еще раз.",
+        message: (
+          <span data-testid="auth-error">
+            {error.status === 409
+              ? "Пользователь с таким email уже существует."
+              : "Не удалось зарегистрироваться. Попробуйте еще раз."}
+          </span>
+        ),
       });
     },
     onSuccess: async () => await navigate({ to: routes.login }),
@@ -64,19 +67,22 @@ export function RegisterForm() {
               type="email"
               autoFocus
               autoComplete="email"
+              data-testid="auth-email"
               {...form.getInputProps("email")}
             />
             <PasswordInput
               label="Пароль"
               autoComplete="new-password"
+              data-testid="auth-password"
               {...form.getInputProps("password")}
             />
             <PasswordInput
               label="Подтвердите пароль"
               autoComplete="new-password"
+              data-testid="auth-password-confimation"
               {...form.getInputProps("confirmPassword")}
             />
-            <Button type="submit" loading={isPending}>
+            <Button type="submit" loading={isPending} data-testid="auth-submit">
               Зарегистрироваться
             </Button>
           </Stack>
