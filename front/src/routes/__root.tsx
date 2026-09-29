@@ -1,11 +1,18 @@
-import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
+import {
+  Link,
+  Outlet,
+  createRootRouteWithContext,
+} from "@tanstack/react-router";
 import { Anchor, Container, Group, Box, Button } from "@mantine/core";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
+import { QueryClient } from "@tanstack/react-query";
 
 import viteLogo from "@/assets/hero.png";
 import { routes } from "@/shared/config";
 
-export const Route = createRootRoute({
+type RouterContext = { queryClient: QueryClient };
+
+export const Route = createRootRouteWithContext<RouterContext>()({
   component: () => (
     <Box mih="100svh" display="flex" style={{ flexDirection: "column" }}>
       <Box
@@ -27,7 +34,11 @@ export const Route = createRootRoute({
               </Anchor>
             </Group>
             <Group>
-              <Button component={Link} to={routes.login} data-testid="nav-signin">
+              <Button
+                component={Link}
+                to={routes.login}
+                data-testid="nav-signin"
+              >
                 Вход
               </Button>
               <Button
