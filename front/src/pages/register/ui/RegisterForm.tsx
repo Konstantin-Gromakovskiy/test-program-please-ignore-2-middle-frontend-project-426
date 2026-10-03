@@ -30,7 +30,7 @@ export function RegisterForm() {
         ),
       });
     },
-    onSuccess: async () => await navigate({ to: routes.login }),
+    onSuccess: async () => await navigate({ to: routes.home }),
   });
   const navigate = useNavigate({ from: routes.register });
 
