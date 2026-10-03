@@ -70,7 +70,12 @@ export function Header() {
               </Button>
             </Group>
           ) : (
-            <Button type="button" onClick={handleLogout} variant="outline">
+            <Button
+              type="button"
+              onClick={handleLogout}
+              variant="outline"
+              data-testid="nav-signout"
+            >
               Выход
             </Button>
           )}
