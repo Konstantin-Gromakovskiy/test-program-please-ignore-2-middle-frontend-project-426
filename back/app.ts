@@ -9,6 +9,7 @@ import { fastifyStatic } from "@fastify/static";
 import path from "path";
 import glue from "fastify-openapi-glue";
 import cookie from "@fastify/cookie";
+import { runMigrations } from "#db/migrate.js";
 
 const SENTRY_DSN = process.env["SENTRY_DSN"];
 const NODE_ENV = process.env["NODE_ENV"];
@@ -18,6 +19,8 @@ if (!NODE_ENV) throw new Error("NODE_ENV is not set");
 if (!PORT) throw new Error("PORT is not set");
 
 if (SENTRY_DSN) Sentry.init({ dsn: SENTRY_DSN, environment: NODE_ENV });
+
+await runMigrations();
 
 const fastify = Fastify({ logger: true });
 configureErrorHandler(fastify);

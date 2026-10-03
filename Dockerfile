@@ -41,6 +41,7 @@ RUN npm ci --omit=dev
 
 COPY --from=front-builder /app/front/dist /app/front/dist
 COPY --from=back-builder /app/back/dist ./dist
+COPY --from=back-builder /app/back/drizzle ./drizzle
 COPY --from=contract-builder /app/contract/index.html /app/contract/index.html
 COPY --from=contract-builder /app/contract/tsp-output/schema/openapi.json /app/contract/tsp-output/schema/openapi.json
 EXPOSE 8080
