@@ -13,6 +13,7 @@ jobs:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
       DATABASE_URL: postgresql://user:password@database:5432/computer_store
+      E2E_DATABASE_URL: postgresql://user:password@localhost:5432/computer_store
       PORT: 3000
     steps:
       - uses: actions/checkout@v4
