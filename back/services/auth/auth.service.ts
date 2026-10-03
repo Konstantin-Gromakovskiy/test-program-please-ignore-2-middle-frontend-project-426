@@ -19,7 +19,7 @@ class AuthService {
       email: userData.email,
       passwordHash,
     });
-    return user;
+    return { user, tokenData: await this.createSession(user.id) };
   }
 
   async login(email: User["email"], password: string) {
@@ -33,18 +33,7 @@ class AuthService {
     if (!isPasswordCorrect)
       throw new UnauthorizedError("Incorrect password or email");
 
-    const newToken = this.cryptoUtils.generateSessionToken();
-
-    const sessionTokenData = await this.sessionRepository.createSession({
-      userId: user.id,
-      tokenHash: this.cryptoUtils.hashSessionToken(newToken),
-      expiresAt: new Date(Date.now() + SESSION_TTL_MS),
-    });
-
-    return {
-      user,
-      tokenData: { token: newToken, expiresAt: sessionTokenData.expiresAt },
-    };
+    return { user, tokenData: await this.createSession(user.id) };
   }
 
   async logout(token: string) {
@@ -61,6 +50,18 @@ class AuthService {
     if (!user) throw new UnauthorizedError("Invalid session user");
 
     return user;
+  }
+
+  private async createSession(userId: User["id"]) {
+    const token = this.cryptoUtils.generateSessionToken();
+
+    const session = await this.sessionRepository.createSession({
+      userId,
+      tokenHash: this.cryptoUtils.hashSessionToken(token),
+      expiresAt: new Date(Date.now() + SESSION_TTL_MS),
+    });
+
+    return { token, expiresAt: session.expiresAt };
   }
 
   async validateSession(token: string) {
