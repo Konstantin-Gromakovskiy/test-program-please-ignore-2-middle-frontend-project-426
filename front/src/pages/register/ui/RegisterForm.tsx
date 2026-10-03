@@ -39,7 +39,6 @@ export function RegisterForm() {
     initialValues: {
       email: "",
       password: "",
-      confirmPassword: "",
     },
     validateInputOnChange: hasValidationErrors,
     validate: registerFormValidation,
@@ -75,12 +74,6 @@ export function RegisterForm() {
               autoComplete="new-password"
               data-testid="auth-password"
               {...form.getInputProps("password")}
-            />
-            <PasswordInput
-              label="Подтвердите пароль"
-              autoComplete="new-password"
-              data-testid="auth-password-confimation"
-              {...form.getInputProps("confirmPassword")}
             />
             <Button type="submit" loading={isPending} data-testid="auth-submit">
               Зарегистрироваться
