@@ -4,7 +4,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import viteLogo from "@/assets/hero.png";
 import { routes } from "@/shared/config";
 import { useQuery } from "@tanstack/react-query";
-import { meQueryOptions } from "@/entitie/user/api/me";
+import { meQueryOptions } from "@/entities/user";
 import { useLogoutMutation } from "@/shared/api";
 import { meQueryKey } from "@/shared/api";
 import { notifications } from "@mantine/notifications";
