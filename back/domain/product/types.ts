@@ -1,8 +1,4 @@
-export type Category = {
-  id: string;
-  name: string;
-  slug: string;
-};
+import type { Category } from "#domain/category/types.js";
 
 export type Product = {
   id: string;

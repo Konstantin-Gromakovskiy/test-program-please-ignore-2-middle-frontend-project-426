@@ -2,11 +2,16 @@ import { db } from "#db/index.js";
 import { cryptoUtils } from "#lib/cryptoUtils.js";
 import { UnauthorizedError } from "#lib/errors.js";
 import {
+  CategoryRepository,
   ProductRepository,
   SessionRepository,
   UserRepository,
 } from "#repository/index.js";
-import { AuthService, ProductService } from "#service/index.js";
+import {
+  AuthService,
+  CategoryService,
+  ProductService,
+} from "#service/index.js";
 import { createRouteHandlers } from "./routes/index.js";
 import { BaseError } from "./lib/errors.js";
 import type { FastifyInstance, FastifyRequest } from "fastify";
@@ -29,11 +34,15 @@ const authService = new AuthService(
   cryptoUtils,
 );
 
+const categoryRepository = new CategoryRepository(db);
+const categoryService = new CategoryService(categoryRepository);
+
 const productRepository = new ProductRepository(db);
 const productService = new ProductService(productRepository);
 
 export const serviceHandlers = createRouteHandlers({
   authService,
+  categoryService,
   productService,
 });
 

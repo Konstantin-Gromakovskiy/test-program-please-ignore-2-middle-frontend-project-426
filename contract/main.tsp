@@ -1,6 +1,7 @@
 import "@typespec/http";
 import "@typespec/openapi";
 import "./auth/auth.tsp";
+import "./categories/categories.tsp";
 import "./products/products.tsp";
 
 using Http;
@@ -17,8 +18,9 @@ using OpenAPI;
 )
 @tagMetadata(
   "Products",
-  #{ description: "Методы, отвечающие за оперциями надо товарами" }
+  #{ description: "Методы, отвечающие за операции над товарами" }
 )
+@tagMetadata("Categories", #{ description: "Методы, отвечающие за категории товаров" })
 @doc("Бекенд сервис магазина комплектующих для пк")
 @route("api")
 namespace Main;
