@@ -15,7 +15,10 @@ using OpenAPI;
     description: "Методы, отвечающие за авторизацию, регистрацию и выход из приложения",
   }
 )
-@tagMetadata("Products", #{ description: "Методы, отвечающие за продукты" })
+@tagMetadata(
+  "Products",
+  #{ description: "Методы, отвечающие за оперциями надо товарами" }
+)
 @doc("Бекенд сервис магазина комплектующих для пк")
 @route("api")
 namespace Main;
