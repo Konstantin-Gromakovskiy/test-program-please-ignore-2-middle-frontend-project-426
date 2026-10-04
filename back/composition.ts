@@ -1,8 +1,12 @@
 import { db } from "#db/index.js";
 import { cryptoUtils } from "#lib/cryptoUtils.js";
 import { UnauthorizedError } from "#lib/errors.js";
-import { SessionRepository, UserRepository } from "#repository/index.js";
-import { AuthService } from "#service/index.js";
+import {
+  ProductRepository,
+  SessionRepository,
+  UserRepository,
+} from "#repository/index.js";
+import { AuthService, ProductService } from "#service/index.js";
 import { createRouteHandlers } from "./routes/index.js";
 import { BaseError } from "./lib/errors.js";
 import type { FastifyInstance, FastifyRequest } from "fastify";
@@ -25,7 +29,13 @@ const authService = new AuthService(
   cryptoUtils,
 );
 
-export const serviceHandlers = createRouteHandlers({ authService });
+const productRepository = new ProductRepository(db);
+const productService = new ProductService(productRepository);
+
+export const serviceHandlers = createRouteHandlers({
+  authService,
+  productService,
+});
 
 export const securityHandlers = {
   SessionAuth: async (request: FastifyRequest) => {
