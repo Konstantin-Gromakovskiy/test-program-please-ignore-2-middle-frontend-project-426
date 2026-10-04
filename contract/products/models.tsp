@@ -14,7 +14,7 @@ model ProductDto {
 
   @doc("Описание продукта")
   @example("Компьютер с процессором i7")
-  @maxLength(256)
+  @maxLength(255)
   description: string;
 
   @doc("Цена продукта в копейках")
