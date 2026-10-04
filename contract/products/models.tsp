@@ -44,7 +44,7 @@ model CategoryDto {
   name: string;
 
   @doc("человекочитаемый идентификатор для URL")
-  @example("computers")
+  @example("cpu")
   @minLength(3)
   @maxLength(128)
   slug: string;

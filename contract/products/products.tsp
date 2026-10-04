@@ -26,6 +26,10 @@ op index(
   @example(10)
   @pageSize
   pageSize?: int32 = 10,
+
+  @query
+  @doc("Slug категории для фильтрации продуктов")
+  categorySlug?: CategoryDto.slug,
 ):
   | {
       @statusCode statusCode: 200;
