@@ -30,6 +30,18 @@ op index(
   @query
   @doc("Slug категории для фильтрации продуктов")
   categorySlug?: CategoryDto.slug,
+
+  @query
+  @doc("Минимальная цена в копейках (включительно)")
+  @minValue(0)
+  @example(100000)
+  minPrice?: int32,
+
+  @query
+  @doc("Максимальная цена в копейках (включительно)")
+  @minValue(0)
+  @example(500000)
+  maxPrice?: int32,
 ):
   | {
       @statusCode statusCode: 200;

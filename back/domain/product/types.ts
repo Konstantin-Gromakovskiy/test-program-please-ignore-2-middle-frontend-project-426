@@ -11,6 +11,8 @@ export type Product = {
 
 export type ProductsFilter = {
   categorySlug?: string | undefined;
+  minPrice?: number | undefined;
+  maxPrice?: number | undefined;
   limit: number;
   offset: number;
 };

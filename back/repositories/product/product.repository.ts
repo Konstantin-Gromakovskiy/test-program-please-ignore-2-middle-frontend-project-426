@@ -1,4 +1,4 @@
-import { asc, count, eq } from "drizzle-orm";
+import { and, asc, count, eq, gte, lte } from "drizzle-orm";
 import { categories, type Db, products } from "#db/index.js";
 import type { Product, ProductsFilter } from "#domain/product/types.js";
 
@@ -7,10 +7,16 @@ export class ProductRepository {
 
   async getProducts({
     categorySlug,
+    minPrice,
+    maxPrice,
     limit,
     offset,
   }: ProductsFilter): Promise<{ items: Product[]; totalItems: number }> {
-    const where = categorySlug ? eq(categories.slug, categorySlug) : undefined;
+    const where = and(
+      categorySlug ? eq(categories.slug, categorySlug) : undefined,
+      minPrice !== undefined ? gte(products.price, minPrice) : undefined,
+      maxPrice !== undefined ? lte(products.price, maxPrice) : undefined,
+    );
 
     const [items, [totalRow]] = await Promise.all([
       this.db

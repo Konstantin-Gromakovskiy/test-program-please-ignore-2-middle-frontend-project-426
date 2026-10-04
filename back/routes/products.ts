@@ -9,6 +9,8 @@ export const createProductHandlers = (productService: ProductService) =>
         page: query?.page ?? 1,
         pageSize: query?.pageSize ?? 10,
         categorySlug: query?.categorySlug,
+        minPrice: query?.minPrice,
+        maxPrice: query?.maxPrice,
       });
 
       return reply.code(200).send(productsPage);
