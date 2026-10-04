@@ -46,6 +46,12 @@ op index(
   @query
   @doc("Фильтр по наличию: все продукты, только в наличии или только отсутствующие")
   availability?: Availability = Availability.all,
+
+  @query
+  @doc("Поисковая строка: поиск по названию и описанию без учёта регистра")
+  @maxLength(128)
+  @example("ryzen")
+  search?: string,
 ):
   | {
       @statusCode statusCode: 200;

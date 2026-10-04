@@ -17,4 +17,5 @@ export type GetProductsParams = {
   minPrice?: number | undefined;
   maxPrice?: number | undefined;
   availability?: Availability | undefined;
+  search?: string | undefined;
 };

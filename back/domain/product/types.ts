@@ -16,6 +16,7 @@ export type ProductsFilter = {
   minPrice?: number | undefined;
   maxPrice?: number | undefined;
   availability?: Availability | undefined;
+  search?: string | undefined;
   limit: number;
   offset: number;
 };

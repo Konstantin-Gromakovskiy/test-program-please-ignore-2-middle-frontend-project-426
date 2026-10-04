@@ -12,6 +12,7 @@ export const createProductHandlers = (productService: ProductService) =>
         minPrice: query?.minPrice,
         maxPrice: query?.maxPrice,
         availability: query?.availability ?? "all",
+        search: query?.search,
       });
 
       return reply.code(200).send(productsPage);

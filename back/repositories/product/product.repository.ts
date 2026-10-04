@@ -1,4 +1,4 @@
-import { and, asc, count, eq, gt, gte, lte } from "drizzle-orm";
+import { and, asc, count, eq, gt, gte, ilike, lte, or } from "drizzle-orm";
 import type { SQL } from "drizzle-orm";
 import { categories, type Db, products } from "#db/index.js";
 import type {
@@ -16,6 +16,19 @@ const availabilityCondition = (
   return undefined;
 };
 
+const searchCondition = (search: string | undefined): SQL | undefined => {
+  const term = search?.trim();
+  if (!term) return undefined;
+
+  // Экранируем спецсимволы LIKE, чтобы строка искалась как обычный текст
+  const pattern = `%${term.replace(/[\\%_]/g, "\\$&")}%`;
+
+  return or(
+    ilike(products.name, pattern),
+    ilike(products.description, pattern),
+  );
+};
+
 export class ProductRepository {
   constructor(private readonly db: Db) {}
 
@@ -24,6 +37,7 @@ export class ProductRepository {
     minPrice,
     maxPrice,
     availability,
+    search,
     limit,
     offset,
   }: ProductsFilter): Promise<{ items: Product[]; totalItems: number }> {
@@ -32,6 +46,7 @@ export class ProductRepository {
       minPrice !== undefined ? gte(products.price, minPrice) : undefined,
       maxPrice !== undefined ? lte(products.price, maxPrice) : undefined,
       availabilityCondition(availability),
+      searchCondition(search),
     );
 
     const [items, [totalRow]] = await Promise.all([
