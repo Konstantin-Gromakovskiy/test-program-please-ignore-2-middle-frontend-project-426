@@ -1,6 +1,17 @@
 services:
+  migrate:
+    build: .
+    image: computer-store-app
+    command: ["node", "dist/db/setup.js"]
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+    depends_on:
+      database:
+        condition: service_healthy
+
   backend:
     build: .
+    image: computer-store-app
     ports:
       - "3000:${PORT}"
     environment:
@@ -9,6 +20,8 @@ services:
     depends_on:
       database:
         condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
 
   database:
     image: postgres:18

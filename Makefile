@@ -10,7 +10,9 @@ front-install:
 	cd front && npm install
 back-install:
 	cd back && npm install
-start: 
+db-setup:
+	cd back && npm run db:setup
+start:
 	cd back && npm run start
 test:
 	cd e2e && npm test
