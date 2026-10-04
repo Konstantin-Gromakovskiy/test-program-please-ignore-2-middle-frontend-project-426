@@ -1,5 +1,7 @@
 import type { Category } from "#domain/category/types.js";
 
+export type Availability = "all" | "inStock" | "outOfStock";
+
 export type Product = {
   id: string;
   name: string;
@@ -13,6 +15,7 @@ export type ProductsFilter = {
   categorySlug?: string | undefined;
   minPrice?: number | undefined;
   maxPrice?: number | undefined;
+  availability?: Availability | undefined;
   limit: number;
   offset: number;
 };

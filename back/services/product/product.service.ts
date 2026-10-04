@@ -11,6 +11,7 @@ class ProductService {
     categorySlug,
     minPrice,
     maxPrice,
+    availability,
   }: GetProductsParams): Promise<ProductsPage> {
     if (minPrice !== undefined && maxPrice !== undefined && minPrice > maxPrice)
       throw new BadRequestError("minPrice must not be greater than maxPrice");
@@ -19,6 +20,7 @@ class ProductService {
       categorySlug,
       minPrice,
       maxPrice,
+      availability,
       limit: pageSize,
       offset: (page - 1) * pageSize,
     });

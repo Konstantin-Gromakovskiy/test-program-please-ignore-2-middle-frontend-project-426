@@ -42,6 +42,10 @@ op index(
   @minValue(0)
   @example(500000)
   maxPrice?: int32,
+
+  @query
+  @doc("Фильтр по наличию: все продукты, только в наличии или только отсутствующие")
+  availability?: Availability = Availability.all,
 ):
   | {
       @statusCode statusCode: 200;

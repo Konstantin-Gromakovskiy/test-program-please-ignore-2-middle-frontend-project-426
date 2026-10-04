@@ -32,4 +32,16 @@ model ProductDto {
   category: CategoryDto;
 }
 
+@doc("Фильтр продуктов по наличию")
+enum Availability {
+  @doc("Все продукты")
+  all,
+
+  @doc("Только продукты в наличии")
+  inStock,
+
+  @doc("Только продукты, которых нет в наличии")
+  outOfStock,
+}
+
 model ProductsPage is Page<ProductDto>;
