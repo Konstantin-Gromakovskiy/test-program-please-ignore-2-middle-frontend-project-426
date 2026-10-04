@@ -22,6 +22,11 @@ Frontend code uses Feature-Sliced Design (FSD). When adding or changing function
 - Put code in `shared` only when it is genuinely reusable and has no domain-specific business logic.
 - Keep helper functions and code not directly responsible for rendering or component behavior in the slice's `lib/` segment.
 
+## Component Conventions
+
+- Do not declare types, interfaces, or mapping helpers inside component files: they add visual noise. Put types in the slice's `model/types.ts` and helpers in `lib/`; a component file contains only markup and behavior and imports its props type.
+- Presentational ("dumb") components, such as a product card, declare their own props interface with display-ready values (for example a formatted `price` string) and never accept API DTOs from `@/shared/api`. A change to the DTO must not affect the component.
+
 ## Existing Structure
 
 The current flat files and directories in `src/` may be migrated to FSD incrementally. Do not perform a broad restructuring unless the task requires it; when adding or substantially changing code, place it in the appropriate FSD layer and preserve existing behavior.
