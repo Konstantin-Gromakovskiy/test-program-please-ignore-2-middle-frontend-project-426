@@ -1,12 +1,13 @@
 import "@typespec/http";
 import "@typespec/openapi";
 import "./auth/auth.tsp";
+import "./products/products.tsp";
 
 using Http;
 using OpenAPI;
 
 @service(#{ title: "Computer parts store" })
-@server("https://example.com", "Single server endpoint")
+@server("http://localhost:3000", "Single server endpoint")
 @summary("Это саммари")
 @tagMetadata(
   "Auth",
@@ -14,6 +15,7 @@ using OpenAPI;
     description: "Методы, отвечающие за авторизацию, регистрацию и выход из приложения",
   }
 )
+@tagMetadata("Products", #{ description: "Методы, отвечающие за продукты" })
 @doc("Бекенд сервис магазина комплектующих для пк")
 @route("api")
 namespace Main;
