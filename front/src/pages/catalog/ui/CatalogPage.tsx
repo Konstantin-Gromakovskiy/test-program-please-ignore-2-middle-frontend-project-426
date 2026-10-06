@@ -26,7 +26,7 @@ export function CatalogPage() {
     navigate({ search: toSearch(values) });
 
   return (
-    <div className="p-2">
+    <Box p="xs">
       <Title order={3} mb="md">
         Каталог
       </Title>
@@ -63,6 +63,6 @@ export function CatalogPage() {
           )}
         </Box>
       </Flex>
-    </div>
+    </Box>
   );
 }

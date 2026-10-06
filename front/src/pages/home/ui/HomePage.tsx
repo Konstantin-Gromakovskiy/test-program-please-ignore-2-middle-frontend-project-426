@@ -1,7 +1,9 @@
+import { Box } from "@mantine/core";
+
 export function HomePage() {
   return (
-    <div className="p-2">
+    <Box p="xs">
       <h3>Welcome Home!</h3>
-    </div>
+    </Box>
   );
 }

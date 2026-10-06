@@ -1,3 +1,5 @@
+import { Box } from "@mantine/core";
+
 export function AboutPage() {
-  return <div className="p-2">Hello from About!</div>;
+  return <Box p="xs">Hello from About!</Box>;
 }
