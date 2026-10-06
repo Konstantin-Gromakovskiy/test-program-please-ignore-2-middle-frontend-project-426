@@ -12,7 +12,7 @@ const toKopecks = (rubles: number | undefined) =>
 
 export const emptyFilterValues: CatalogFilterValues = {
   search: "",
-  categorySlug: null,
+  categorySlug: "",
   minPrice: "",
   maxPrice: "",
   inStockOnly: false,
@@ -20,7 +20,7 @@ export const emptyFilterValues: CatalogFilterValues = {
 
 export const toFilterValues = (search: CatalogSearch): CatalogFilterValues => ({
   search: search.search ?? "",
-  categorySlug: search.categorySlug ?? null,
+  categorySlug: search.categorySlug ?? "",
   minPrice: search.minPrice ?? "",
   maxPrice: search.maxPrice ?? "",
   inStockOnly: search.inStockOnly ?? false,
@@ -30,7 +30,7 @@ export const toFilterValues = (search: CatalogSearch): CatalogFilterValues => ({
 export const toSearch = (values: CatalogFilterValues): CatalogSearch => ({
   page: 1,
   search: values.search.trim() || undefined,
-  categorySlug: values.categorySlug ?? undefined,
+  categorySlug: values.categorySlug || undefined,
   minPrice: toOptionalPrice(values.minPrice),
   maxPrice: toOptionalPrice(values.maxPrice),
   inStockOnly: values.inStockOnly || undefined,

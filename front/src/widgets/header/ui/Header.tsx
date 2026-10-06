@@ -41,7 +41,11 @@ export function Header() {
         <Group justify="space-between" align="center">
           <img src={viteLogo} alt="logo" width={30} />
           <Group>
-            <Anchor component={Link} to={routes.catalog}>
+            <Anchor
+              component={Link}
+              to={routes.catalog}
+              data-testid="nav-catalog"
+            >
               Каталог
             </Anchor>
             <Anchor component={Link} to={routes.about}>

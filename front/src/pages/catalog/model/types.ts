@@ -20,7 +20,7 @@ export type CatalogSearch = {
 /** Значения полей формы фильтров. */
 export type CatalogFilterValues = {
   search: string;
-  categorySlug: string | null;
+  categorySlug: string;
   minPrice: number | string;
   maxPrice: number | string;
   inStockOnly: boolean;

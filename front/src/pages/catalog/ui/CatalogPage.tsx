@@ -53,7 +53,7 @@ export function CatalogPage() {
           )}
           {isError && <Alert color="red">Не удалось загрузить товары</Alert>}
           {data && data.items.length === 0 && (
-            <Center mih="60vh">
+            <Center mih="60vh" data-testid="catalog-empty">
               <Text>Товаров нет</Text>
             </Center>
           )}

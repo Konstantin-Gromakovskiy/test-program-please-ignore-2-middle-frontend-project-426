@@ -1,4 +1,4 @@
-import { Badge, Card, Group, Text } from "@mantine/core";
+import { Anchor, Badge, Card, Group, Text } from "@mantine/core";
 import type { ProductCardProps } from "../model/types";
 
 export function ProductCard({
@@ -9,10 +9,21 @@ export function ProductCard({
   inStock,
 }: ProductCardProps) {
   return (
-    <Card withBorder padding="md" data-testid="product-card">
+    <Card withBorder padding="md" data-testid="catalog-item">
       <Group justify="space-between" align="flex-start" mb="xs">
-        <Text fw={600}>{name}</Text>
-        <Badge color={inStock ? "green" : "gray"}>
+        <Anchor
+          fw={600}
+          href="#"
+          onClick={(event) => event.preventDefault()}
+          data-testid="catalog-item-name"
+        >
+          {name}
+        </Anchor>
+        <Badge
+          color={inStock ? "green" : "gray"}
+          data-testid="catalog-item-availability"
+          data-available={inStock}
+        >
           {inStock ? "В наличии" : "Нет в наличии"}
         </Badge>
       </Group>
@@ -22,7 +33,9 @@ export function ProductCard({
       <Text size="sm" mb="md">
         {description}
       </Text>
-      <Text fw={700}>{price}</Text>
+      <Text fw={700} data-testid="catalog-item-price">
+        {price}
+      </Text>
     </Card>
   );
 }

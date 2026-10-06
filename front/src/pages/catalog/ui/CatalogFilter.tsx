@@ -2,9 +2,9 @@ import {
   Button,
   Checkbox,
   Group,
+  NativeSelect,
   NumberInput,
   Paper,
-  Select,
   Stack,
   TextInput,
 } from "@mantine/core";
@@ -27,18 +27,18 @@ export function CatalogFilter({
   });
 
   return (
-    <Paper withBorder radius="md" p="md" data-testid="catalog-filter">
+    <Paper withBorder radius="md" p="md" data-testid="catalog-filters">
       <Stack gap="sm">
         <TextInput
           label="Название"
           placeholder="Поиск по названию"
+          data-testid="filter-search"
           {...form.getInputProps("search")}
         />
-        <Select
+        <NativeSelect
           label="Категория"
-          placeholder="Все категории"
-          data={categories}
-          clearable
+          data={[{ value: "", label: "Все категории" }, ...categories]}
+          data-testid="filter-category"
           {...form.getInputProps("categorySlug")}
         />
         <Group grow gap="xs" align="flex-end">
@@ -46,21 +46,25 @@ export function CatalogFilter({
             label="Цена от"
             min={0}
             hideControls
+            data-testid="filter-price-min"
             {...form.getInputProps("minPrice")}
           />
           <NumberInput
             label="Цена до"
             min={0}
             hideControls
+            data-testid="filter-price-max"
             {...form.getInputProps("maxPrice")}
           />
         </Group>
         <Checkbox
           label="Только в наличии"
+          data-testid="filter-available"
           {...form.getInputProps("inStockOnly", { type: "checkbox" })}
         />
         <Button
           variant="outline"
+          data-testid="filter-reset"
           onClick={() => form.setValues(emptyFilterValues)}
         >
           Сбросить фильтры
