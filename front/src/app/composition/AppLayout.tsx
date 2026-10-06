@@ -12,7 +12,7 @@ export function AppLayout({ children }: AppLayoutProps) {
     <Box mih="100svh" display="flex" style={{ flexDirection: "column" }}>
       <Header />
       <main style={{ flex: 1, minHeight: 0, display: "flex" }}>
-        <Container size={1126} style={{ flex: 1 }}>
+        <Container size={1600} style={{ flex: 1 }}>
           {children}
         </Container>
       </main>

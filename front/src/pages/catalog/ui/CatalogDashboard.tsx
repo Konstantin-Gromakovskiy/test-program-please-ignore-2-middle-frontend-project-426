@@ -10,7 +10,7 @@ export function CatalogDashboard({
 }: CatalogDashboardProps) {
   return (
     <div>
-      <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing="md">
+      <SimpleGrid cols={{ base: 1, sm: 2, lg: 2 }} spacing="md">
         {products.map((product) => (
           <ProductCard key={product.id} {...product} />
         ))}

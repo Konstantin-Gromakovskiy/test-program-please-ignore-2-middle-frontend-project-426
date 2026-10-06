@@ -37,7 +37,7 @@ export function Header() {
         boxShadow: theme.shadows.sm,
       })}
     >
-      <Container size={1126}>
+      <Container size={1600}>
         <Group justify="space-between" align="center">
           <img src={viteLogo} alt="logo" width={30} />
           <Group>
