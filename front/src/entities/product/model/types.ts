@@ -1,4 +1,5 @@
 export type ProductCardProps = {
+  id: string;
   name: string;
   description: string;
   categoryName: string;
