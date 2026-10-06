@@ -29,9 +29,6 @@ export function Header() {
   });
   const handleLogout = () => logout({});
 
-  console.log("user", user);
-  console.log("isLoading", isLoading);
-
   return (
     <Box
       component="header"
