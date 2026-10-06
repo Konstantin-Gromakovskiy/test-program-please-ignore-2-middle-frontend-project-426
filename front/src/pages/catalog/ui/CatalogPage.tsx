@@ -52,7 +52,11 @@ export function CatalogPage() {
             </Center>
           )}
           {isError && <Alert color="red">Не удалось загрузить товары</Alert>}
-          {data && data.items.length === 0 && <Text>Товаров нет</Text>}
+          {data && data.items.length === 0 && (
+            <Center mih="60vh">
+              <Text>Товаров нет</Text>
+            </Center>
+          )}
           {data && data.items.length > 0 && (
             <CatalogDashboard
               products={data.items.map(toProductCardProps)}
