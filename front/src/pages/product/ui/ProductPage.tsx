@@ -14,6 +14,7 @@ import {
   Title,
 } from "@mantine/core";
 import { Link, getRouteApi } from "@tanstack/react-router";
+import { useCartStore } from "@/entities/cart";
 import { formatPrice } from "@/entities/product";
 import { useGetProductQuery } from "@/shared/api";
 import { routes } from "@/shared/config";
@@ -31,6 +32,7 @@ export function ProductPage() {
   } = useGetProductQuery({
     path: { id: productId },
   });
+  const addItem = useCartStore((state) => state.addItem);
 
   if (isPending) {
     return (
@@ -103,7 +105,12 @@ export function ProductPage() {
           <Text size="xl" fw={700} data-testid="product-price">
             {formatPrice(product.price)}
           </Text>
-          <Button data-testid="product-add-to-cart">В корзину</Button>
+          <Button
+            onClick={() => addItem(product.id)}
+            data-testid="product-add-to-cart"
+          >
+            В корзину
+          </Button>
         </Stack>
       </Flex>
     </Box>

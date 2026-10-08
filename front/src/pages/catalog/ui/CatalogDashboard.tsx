@@ -1,4 +1,5 @@
 import { Pagination, SimpleGrid } from "@mantine/core";
+import { useCartStore } from "@/entities/cart";
 import { ProductCard } from "@/entities/product";
 import { getPaginationControlProps } from "../lib/paginationControlProps";
 import type { CatalogDashboardProps } from "../model/types";
@@ -9,6 +10,8 @@ export function CatalogDashboard({
   totalPages,
   onPageChange,
 }: CatalogDashboardProps) {
+  const addItem = useCartStore((state) => state.addItem);
+
   return (
     <div>
       <SimpleGrid
@@ -17,7 +20,7 @@ export function CatalogDashboard({
         data-testid="catalog-list"
       >
         {products.map((product) => (
-          <ProductCard key={product.id} {...product} />
+          <ProductCard key={product.id} {...product} onAddToCart={addItem} />
         ))}
       </SimpleGrid>
       <Pagination

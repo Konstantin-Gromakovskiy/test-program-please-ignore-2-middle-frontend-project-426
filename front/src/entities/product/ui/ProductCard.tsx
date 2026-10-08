@@ -12,7 +12,8 @@ export function ProductCard({
   price,
   inStock,
   imageUrl,
-}: ProductCardProps) {
+  onAddToCart,
+}: ProductCardProps & { onAddToCart: (productId: string) => void }) {
   return (
     <Card withBorder padding="md" data-testid="catalog-item">
       <Group wrap="nowrap" align="stretch" gap="md" h="100%">
@@ -62,7 +63,11 @@ export function ProductCard({
             <Text fw={700} data-testid="catalog-item-price">
               {price}
             </Text>
-            <Button size="xs" data-testid="catalog-item-add-to-cart">
+            <Button
+              size="xs"
+              onClick={() => onAddToCart(id)}
+              data-testid="catalog-item-add-to-cart"
+            >
               В корзину
             </Button>
           </Group>
