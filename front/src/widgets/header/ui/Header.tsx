@@ -1,9 +1,10 @@
 import { Link } from "@tanstack/react-router";
-import { Anchor, Box, Button, Container, Group } from "@mantine/core";
+import { Anchor, Badge, Box, Button, Container, Group } from "@mantine/core";
 import { useQueryClient } from "@tanstack/react-query";
 import viteLogo from "@/assets/hero.png";
 import { routes } from "@/shared/config";
 import { useQuery } from "@tanstack/react-query";
+import { useCartCount } from "@/entities/cart";
 import { meQueryOptions } from "@/entities/user";
 import { useLogoutMutation } from "@/shared/api";
 import { meQueryKey } from "@/shared/api";
@@ -14,6 +15,7 @@ export function Header() {
   const { data: user, isLoading } = useQuery(meQueryOptions());
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const cartCount = useCartCount();
 
   const { mutate: logout } = useLogoutMutation({
     onSuccess: () => {
@@ -48,9 +50,24 @@ export function Header() {
             >
               Каталог
             </Anchor>
-            <Anchor component={Link} to={routes.about}>
+            <Button
+              type="button"
+              variant="default"
+              rightSection={
+                cartCount > 0 ? (
+                  <Badge
+                    size="sm"
+                    circle
+                    data-testid="nav-cart-count"
+                  >
+                    {cartCount}
+                  </Badge>
+                ) : null
+              }
+              data-testid="nav-cart"
+            >
               Корзина
-            </Anchor>
+            </Button>
           </Group>
           {isLoading || user === null ? (
             <Group>

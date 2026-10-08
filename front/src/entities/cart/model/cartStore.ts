@@ -84,6 +84,12 @@ export const useCartStore = create<CartState>()(
   ),
 );
 
+/** Общее количество единиц товара в корзине (с учётом quantity). */
+export const useCartCount = () =>
+  useCartStore((state) =>
+    state.items.reduce((sum, item) => sum + item.quantity, 0),
+  );
+
 // Подтягиваем изменения корзины, сделанные в других вкладках
 if (typeof window !== "undefined") {
   window.addEventListener("storage", (event) => {
