@@ -8,6 +8,7 @@ export interface ProductRepository {
   getProducts(
     filter: ProductsFilter,
   ): Promise<{ items: Product[]; totalItems: number }>;
+  getProductById(id: string): Promise<Product | undefined>;
 }
 
 export type GetProductsParams = {

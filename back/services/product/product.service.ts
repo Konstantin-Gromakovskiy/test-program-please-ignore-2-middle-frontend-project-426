@@ -1,9 +1,16 @@
-import type { ProductsPage } from "#domain/product/types.js";
-import { BadRequestError } from "#lib/errors.js";
+import type { Product, ProductsPage } from "#domain/product/types.js";
+import { BadRequestError, NotFoundError } from "#lib/errors.js";
 import type { GetProductsParams, ProductRepository } from "./product.types.js";
 
 class ProductService {
   constructor(private readonly productRepository: ProductRepository) {}
+
+  async getProductById(id: string): Promise<Product> {
+    const product = await this.productRepository.getProductById(id);
+    if (!product) throw new NotFoundError("Product not found");
+
+    return product;
+  }
 
   async getProducts({
     page,

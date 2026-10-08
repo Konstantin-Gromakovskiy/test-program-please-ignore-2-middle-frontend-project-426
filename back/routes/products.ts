@@ -17,4 +17,9 @@ export const createProductHandlers = (productService: ProductService) =>
 
       return reply.code(200).send(productsPage);
     },
+    getProduct: async (request, reply) => {
+      const product = await productService.getProductById(request.params.id);
+
+      return reply.code(200).send(product);
+    },
   });

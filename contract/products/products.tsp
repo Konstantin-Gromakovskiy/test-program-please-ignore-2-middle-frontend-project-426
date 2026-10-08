@@ -58,3 +58,20 @@ op index(
       @body _: ProductsPage;
     }
   | Error.BadRequestError;
+
+@get
+@route("{id}")
+@operationId("getProduct")
+op show(
+  @path
+  @doc("Идентификатор продукта")
+  @format("uuid")
+  @example("df8b568e-7a35-4e3f-8218-ed02fb710858")
+  id: string,
+):
+  | {
+      @statusCode statusCode: 200;
+      @body _: ProductDto;
+    }
+  | Error.BadRequestError
+  | Error.NotFoundError;

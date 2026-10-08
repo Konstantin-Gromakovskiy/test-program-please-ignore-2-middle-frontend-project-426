@@ -29,8 +29,33 @@ const searchCondition = (search: string | undefined): SQL | undefined => {
   );
 };
 
+const productColumns = {
+  id: products.id,
+  name: products.name,
+  description: products.description,
+  price: products.price,
+  stock: products.stock,
+  imageUrl: products.imageUrl,
+  category: {
+    id: categories.id,
+    name: categories.name,
+    slug: categories.slug,
+  },
+};
+
 export class ProductRepository {
   constructor(private readonly db: Db) {}
+
+  async getProductById(id: string): Promise<Product | undefined> {
+    const [product] = await this.db
+      .select(productColumns)
+      .from(products)
+      .innerJoin(categories, eq(products.categoryId, categories.id))
+      .where(eq(products.id, id))
+      .limit(1);
+
+    return product;
+  }
 
   async getProducts({
     categorySlug,
@@ -51,19 +76,7 @@ export class ProductRepository {
 
     const [items, [totalRow]] = await Promise.all([
       this.db
-        .select({
-          id: products.id,
-          name: products.name,
-          description: products.description,
-          price: products.price,
-          stock: products.stock,
-          imageUrl: products.imageUrl,
-          category: {
-            id: categories.id,
-            name: categories.name,
-            slug: categories.slug,
-          },
-        })
+        .select(productColumns)
         .from(products)
         .innerJoin(categories, eq(products.categoryId, categories.id))
         .where(where)
