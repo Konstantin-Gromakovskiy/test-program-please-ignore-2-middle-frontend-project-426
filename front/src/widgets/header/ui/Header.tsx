@@ -51,7 +51,13 @@ export function Header() {
               Каталог
             </Anchor>
             <Group gap={6} wrap="nowrap">
-              <Anchor data-testid="nav-cart">Корзина</Anchor>
+              <Anchor
+                component={Link}
+                to={routes.cart}
+                data-testid="nav-cart"
+              >
+                Корзина
+              </Anchor>
               {cartCount > 0 && (
                 <Badge size="sm" circle data-testid="nav-cart-count">
                   {cartCount}
