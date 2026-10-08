@@ -1,4 +1,4 @@
-import { Anchor, Badge, Card, Group, Image, Stack, Text } from "@mantine/core";
+import { Anchor, Badge, Button, Card, Group, Image, Stack, Text } from "@mantine/core";
 import { Link } from "@tanstack/react-router";
 import type { ProductCardProps } from "../model/types";
 
@@ -58,9 +58,14 @@ export function ProductCard({
             </Text>
             <Text size="sm">{description}</Text>
           </div>
-          <Text fw={700} data-testid="catalog-item-price">
-            {price}
-          </Text>
+          <Group justify="space-between" align="center">
+            <Text fw={700} data-testid="catalog-item-price">
+              {price}
+            </Text>
+            <Button size="xs" data-testid="catalog-item-add-to-cart">
+              В корзину
+            </Button>
+          </Group>
         </Stack>
       </Group>
     </Card>
