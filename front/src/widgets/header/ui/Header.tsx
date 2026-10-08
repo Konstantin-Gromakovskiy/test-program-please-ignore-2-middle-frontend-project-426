@@ -50,24 +50,14 @@ export function Header() {
             >
               Каталог
             </Anchor>
-            <Button
-              type="button"
-              variant="default"
-              rightSection={
-                cartCount > 0 ? (
-                  <Badge
-                    size="sm"
-                    circle
-                    data-testid="nav-cart-count"
-                  >
-                    {cartCount}
-                  </Badge>
-                ) : null
-              }
-              data-testid="nav-cart"
-            >
-              Корзина
-            </Button>
+            <Group gap={6} wrap="nowrap">
+              <Anchor data-testid="nav-cart">Корзина</Anchor>
+              {cartCount > 0 && (
+                <Badge size="sm" circle data-testid="nav-cart-count">
+                  {cartCount}
+                </Badge>
+              )}
+            </Group>
           </Group>
           {isLoading || user === null ? (
             <Group>
