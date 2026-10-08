@@ -1,9 +1,11 @@
 import { Anchor, Badge, Card, Group, Image, Stack, Text } from "@mantine/core";
+import { Link } from "@tanstack/react-router";
 import type { ProductCardProps } from "../model/types";
 
 const IMAGE_FALLBACK = "https://placehold.co/400x300?text=Нет+фото";
 
 export function ProductCard({
+  id,
   name,
   description,
   categoryName,
@@ -32,8 +34,13 @@ export function ProductCard({
             <Group justify="space-between" align="flex-start" mb="xs">
               <Anchor
                 fw={600}
-                href="#"
-                onClick={(event) => event.preventDefault()}
+                renderRoot={(props) => (
+                  <Link
+                    to="/products/$productId"
+                    params={{ productId: id }}
+                    {...props}
+                  />
+                )}
                 data-testid="catalog-item-name"
               >
                 {name}

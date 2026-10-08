@@ -15,6 +15,7 @@ import { Route as CatalogRouteImport } from './routes/catalog'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
+import { Route as ProductsProductIdRouteImport } from './routes/products.$productId'
 
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
@@ -45,6 +46,11 @@ const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const ProductsProductIdRoute = ProductsProductIdRouteImport.update({
+  id: '/products/$productId',
+  path: '/products/$productId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
@@ -52,12 +58,14 @@ export interface FileRoutesByFullPath {
   '/catalog': typeof CatalogRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/products/$productId': typeof ProductsProductIdRoute
 }
 export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/catalog': typeof CatalogRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/products/$productId': typeof ProductsProductIdRoute
   '/': typeof AuthenticatedIndexRoute
 }
 export interface FileRoutesById {
@@ -67,13 +75,26 @@ export interface FileRoutesById {
   '/catalog': typeof CatalogRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/products/$productId': typeof ProductsProductIdRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/catalog' | '/login' | '/register'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/catalog'
+    | '/login'
+    | '/register'
+    | '/products/$productId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/about' | '/catalog' | '/login' | '/register' | '/'
+  to:
+    | '/about'
+    | '/catalog'
+    | '/login'
+    | '/register'
+    | '/products/$productId'
+    | '/'
   id:
     | '__root__'
     | '/_authenticated'
@@ -81,6 +102,7 @@ export interface FileRouteTypes {
     | '/catalog'
     | '/login'
     | '/register'
+    | '/products/$productId'
     | '/_authenticated/'
   fileRoutesById: FileRoutesById
 }
@@ -90,6 +112,7 @@ export interface RootRouteChildren {
   CatalogRoute: typeof CatalogRoute
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
+  ProductsProductIdRoute: typeof ProductsProductIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -136,6 +159,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/products/$productId': {
+      id: '/products/$productId'
+      path: '/products/$productId'
+      fullPath: '/products/$productId'
+      preLoaderRoute: typeof ProductsProductIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -157,6 +187,7 @@ const rootRouteChildren: RootRouteChildren = {
   CatalogRoute: CatalogRoute,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
+  ProductsProductIdRoute: ProductsProductIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
