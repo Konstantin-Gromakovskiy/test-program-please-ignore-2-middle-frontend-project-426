@@ -1,4 +1,4 @@
-import { inArray } from "drizzle-orm";
+import { and, inArray, isNull, eq } from "drizzle-orm";
 import { categories, db, products } from "./index.js";
 
 type SeedProduct = {
@@ -7,6 +7,9 @@ type SeedProduct = {
   price: number;
   stock: number;
 };
+
+const getImageUrl = (slug: string, name: string) =>
+  `https://picsum.photos/seed/${encodeURIComponent(`${slug}-${name}`)}/400/300`;
 
 const SEED_CATEGORIES = [
   { slug: "cpu", name: "Процессоры" },
@@ -18,7 +21,7 @@ const SEED_CATEGORIES = [
 ];
 
 // Цены в копейках. stock: 0 — товар недоступен.
-// В таблице products нет поля изображения, поэтому у всех товаров показывается заглушка.
+// imageUrl генерируется из категории и названия (см. getImageUrl).
 const SEED_PRODUCTS: Record<string, SeedProduct[]> = {
   cpu: [
     {
@@ -389,8 +392,31 @@ export const runSeed = async () => {
 
     return items
       .filter((item) => !existingKeys.has(`${categoryId}:${item.name}`))
-      .map((item) => ({ ...item, categoryId }));
+      .map((item) => ({
+        ...item,
+        categoryId,
+        imageUrl: getImageUrl(slug, item.name),
+      }));
   });
 
   if (newProducts.length > 0) await db.insert(products).values(newProducts);
+
+  // Проставляем изображения товарам, добавленным до появления поля image_url
+  for (const [slug, items] of Object.entries(SEED_PRODUCTS)) {
+    const categoryId = categoryIdBySlug.get(slug);
+    if (!categoryId) continue;
+
+    for (const item of items) {
+      await db
+        .update(products)
+        .set({ imageUrl: getImageUrl(slug, item.name) })
+        .where(
+          and(
+            eq(products.categoryId, categoryId),
+            eq(products.name, item.name),
+            isNull(products.imageUrl),
+          ),
+        );
+    }
+  }
 };

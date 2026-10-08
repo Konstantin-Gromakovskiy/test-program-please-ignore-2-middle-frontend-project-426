@@ -18,6 +18,7 @@ export const products = pgTable(
     description: varchar("description", { length: 256 }).notNull(),
     price: integer("price").notNull(),
     stock: integer("stock").notNull(),
+    imageUrl: varchar("image_url", { length: 512 }),
     categoryId: uuid("category_id")
       .notNull()
       .references(() => categories.id, { onDelete: "restrict" }),

@@ -28,6 +28,11 @@ model ProductDto {
   @minValue(0)
   stock: int32;
 
+  @doc("Ссылка на изображение продукта")
+  @example("https://picsum.photos/seed/cpu-ryzen-5-7600/400/300")
+  @maxLength(512)
+  imageUrl: string | null;
+
   @doc("Категория продукта")
   category: CategoryDto;
 }
