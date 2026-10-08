@@ -1,7 +1,9 @@
 import {
   Alert,
+  Anchor,
   Badge,
   Box,
+  Breadcrumbs,
   Button,
   Center,
   Flex,
@@ -11,9 +13,10 @@ import {
   Text,
   Title,
 } from "@mantine/core";
-import { getRouteApi } from "@tanstack/react-router";
+import { Link, getRouteApi } from "@tanstack/react-router";
 import { formatPrice } from "@/entities/product";
 import { useGetProductQuery } from "@/shared/api";
+import { routes } from "@/shared/config";
 
 const route = getRouteApi("/products/$productId");
 
@@ -21,7 +24,11 @@ const IMAGE_FALLBACK = "https://placehold.co/600x450?text=Нет+фото";
 
 export function ProductPage() {
   const { productId } = route.useParams();
-  const { data: product, isPending, isError } = useGetProductQuery({
+  const {
+    data: product,
+    isPending,
+    isError,
+  } = useGetProductQuery({
     path: { id: productId },
   });
 
@@ -47,9 +54,26 @@ export function ProductPage() {
 
   return (
     <Box p="xs" data-testid="product-page">
+      <Breadcrumbs mb="lg" data-testid="product-breadcrumbs">
+        <Anchor component={Link} to={routes.catalog}>
+          Каталог
+        </Anchor>
+        <Anchor
+          renderRoot={(props) => (
+            <Link
+              to={routes.catalog}
+              search={{ page: 1, categorySlug: product.category.slug }}
+              {...props}
+            />
+          )}
+        >
+          {product.category.name}
+        </Anchor>
+        <Text>{product.name}</Text>
+      </Breadcrumbs>
       <Flex
         direction={{ base: "column", md: "row" }}
-        justify="center"
+        justify="start"
         align={{ base: "stretch", md: "center" }}
         gap={{ base: 32, md: 64 }}
       >
