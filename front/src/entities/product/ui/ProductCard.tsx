@@ -1,5 +1,7 @@
-import { Anchor, Badge, Card, Group, Text } from "@mantine/core";
+import { Anchor, Badge, Card, Group, Image, Text } from "@mantine/core";
 import type { ProductCardProps } from "../model/types";
+
+const IMAGE_FALLBACK = "https://placehold.co/400x300?text=Нет+фото";
 
 export function ProductCard({
   name,
@@ -7,9 +9,20 @@ export function ProductCard({
   categoryName,
   price,
   inStock,
+  imageUrl,
 }: ProductCardProps) {
   return (
     <Card withBorder padding="md" data-testid="catalog-item">
+      <Card.Section mb="md">
+        <Image
+          src={imageUrl}
+          fallbackSrc={IMAGE_FALLBACK}
+          alt={name}
+          h={180}
+          loading="lazy"
+          data-testid="catalog-item-image"
+        />
+      </Card.Section>
       <Group justify="space-between" align="flex-start" mb="xs">
         <Anchor
           fw={600}

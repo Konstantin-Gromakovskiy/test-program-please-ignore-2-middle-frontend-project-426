@@ -9,4 +9,5 @@ export const toProductCardProps = (product: ProductDto): ProductCardProps => ({
   categoryName: product.category.name,
   price: formatPrice(product.price),
   inStock: product.stock > 0,
+  imageUrl: product.imageUrl,
 });
