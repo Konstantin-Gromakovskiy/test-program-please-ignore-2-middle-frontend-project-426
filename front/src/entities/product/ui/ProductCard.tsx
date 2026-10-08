@@ -65,10 +65,11 @@ export function ProductCard({
             </Text>
             <Button
               size="xs"
+              disabled={!inStock}
               onClick={() => onAddToCart(id)}
               data-testid="catalog-item-add-to-cart"
             >
-              В корзину
+              {inStock ? "В корзину" : "Нет в наличии"}
             </Button>
           </Group>
         </Stack>

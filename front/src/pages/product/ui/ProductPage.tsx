@@ -106,10 +106,11 @@ export function ProductPage() {
             {formatPrice(product.price)}
           </Text>
           <Button
+            disabled={!inStock}
             onClick={() => addItem(product.id)}
             data-testid="product-add-to-cart"
           >
-            В корзину
+            {inStock ? "В корзину" : "Нет в наличии"}
           </Button>
         </Stack>
       </Flex>
