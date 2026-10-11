@@ -1,4 +1,3 @@
-import "../common/primitives.tsp";
 import "../common/pagination.tsp";
 import "../categories/models.tsp";
 
