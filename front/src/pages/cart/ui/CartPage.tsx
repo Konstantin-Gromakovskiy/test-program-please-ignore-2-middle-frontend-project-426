@@ -2,6 +2,7 @@ import {
   Alert,
   Anchor,
   Box,
+  Button,
   Center,
   Group,
   Loader,
@@ -64,6 +65,9 @@ export function CartPage() {
         <Text size="xl" fw={700} data-testid="cart-total">
           {total}
         </Text>
+      </Group>
+      <Group justify="flex-end" mt="md">
+        <Button data-testid="cart-checkout">Оформить заказ</Button>
       </Group>
     </Box>
   );

@@ -75,7 +75,7 @@ export function CartItemRow({
           onChange={(value) => {
             if (typeof value === "number") onQuantityChange(id, value);
           }}
-          data-testid="cart-item-quantity"
+          data-testid="cart-item-qty"
         />
         <Text fw={700} w={110} ta="right" data-testid="cart-item-total">
           {lineTotal}
