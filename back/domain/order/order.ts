@@ -35,7 +35,22 @@ export type NewOrder = DeliveryInfo & {
   items: NewOrderItem[];
 };
 
-export type  CreateOrderInput = DeliveryInfo & {
+export type OrdersFilter = {
+  limit: number;
+  offset: number;
+}
+
+export type OrdersPage = {
+  items: Order[];
+  meta: {
+    page: number;
+    pageSize: number;
+    totalItems: number;
+    totalPages: number;
+  };
+}
+
+export type CreateOrderInput = DeliveryInfo & {
   userId: string;
   products: {
     productId: string;

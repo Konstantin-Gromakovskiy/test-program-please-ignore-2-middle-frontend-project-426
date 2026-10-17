@@ -53,7 +53,8 @@ const orderUnitOfWork: UnitOfWork = {
     ),
 }
 
-const orderService = new OrderService(orderUnitOfWork)
+const orderRepository = new OrderRepository(db)
+const orderService = new OrderService(orderUnitOfWork, orderRepository)
 
 export const serviceHandlers = createRouteHandlers({
   authService,

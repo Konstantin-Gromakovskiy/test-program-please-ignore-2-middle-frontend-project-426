@@ -1,9 +1,36 @@
-import type { UnitOfWork } from './order.types.js'
-import type { CreateOrderInput, NewOrder, NewOrderItem } from '#domain/order/order.js'
+import type { GetOrdersParams, OrderRepository, UnitOfWork } from './order.types.js'
+import type { CreateOrderInput, NewOrder, NewOrderItem, Order, OrdersPage } from '#domain/order/order.js'
 import { BadRequestError, NotFoundError } from '#lib/errors.js'
 
 export default class OrderService {
-  constructor(private readonly unitOfWork: UnitOfWork) {}
+  constructor(
+    private readonly unitOfWork: UnitOfWork,
+    private readonly orderRepository: OrderRepository,
+  ) {}
+
+  async getOrder(id: string, userId: string): Promise<Order> {
+    const order = await this.orderRepository.getOrderById(id, userId)
+    if (!order) throw new NotFoundError('Order not found')
+
+    return order
+  }
+
+  async getOrders({ userId, page, pageSize }: GetOrdersParams): Promise<OrdersPage> {
+    const { items, totalItems } = await this.orderRepository.getOrdersByUserId(userId, {
+      limit: pageSize,
+      offset: (page - 1) * pageSize,
+    })
+
+    return {
+      items,
+      meta: {
+        page,
+        pageSize,
+        totalItems,
+        totalPages: Math.ceil(totalItems / pageSize),
+      },
+    }
+  }
 
   async createOrder(data: CreateOrderInput) {
     const { products } = data

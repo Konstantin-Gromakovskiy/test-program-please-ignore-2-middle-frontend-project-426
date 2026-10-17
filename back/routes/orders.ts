@@ -2,7 +2,8 @@ import { defineHandlers } from '#lib/utils.js'
 import type { OrderService, AuthService } from '#service/index.js'
 import { UnauthorizedError } from '#lib/errors.js'
 import type { Order } from '#domain/order/order.js'
-import type { OrderDto, OrdersPage } from '../types/handlers/types.gen.ts'
+import type { OrderDto } from '../types/handlers/types.gen.ts'
+import type { FastifyRequest } from 'fastify'
 
 const toOrderDto = (order: Order): OrderDto => ({
   id: order.id,
@@ -19,20 +20,35 @@ const toOrderDto = (order: Order): OrderDto => ({
   ...(order.deliveryMethod === 'delivery' && { shippingAddress: order.shippingAddress }),
 })
 
-export const createOrderHandlers = (orderService: OrderService, authService: AuthService) =>
-  defineHandlers({
-    getOrder: async (_, reply) => {
-      return reply.code(200).send({} as OrderDto)
+export const createOrderHandlers = (orderService: OrderService, authService: AuthService) => {
+  const getSessionUser = (request: FastifyRequest) => {
+    const token = request.cookies['session']
+    if (!token) throw new UnauthorizedError('No session cookie')
+
+    return authService.getCurrentUser(token)
+  }
+
+  return defineHandlers({
+    getOrder: async (request, reply) => {
+      const user = await getSessionUser(request)
+      const order = await orderService.getOrder(request.params.id, user.id)
+      return reply.code(200).send(toOrderDto(order))
     },
-    getOrders: async (_, reply) => {
-      return reply.code(200).send({} as OrdersPage)
+    getOrders: async (request, reply) => {
+      const user = await getSessionUser(request)
+      const ordersPage = await orderService.getOrders({
+        userId: user.id,
+        page: request.query?.page ?? 1,
+        pageSize: request.query?.pageSize ?? 10,
+      })
+      return reply.code(200).send({
+        items: ordersPage.items.map(toOrderDto),
+        meta: ordersPage.meta,
+      })
     },
     createOrder: async (request, reply) => {
-      const { body, cookies } = request
-      const token = cookies['session']
-      if (!token) throw new UnauthorizedError('No session cookie')
-
-      const user = await authService.getCurrentUser(token)
+      const { body } = request
+      const user = await getSessionUser(request)
       const { shippingAddress } = body
       const order = await orderService.createOrder({
         userId: user.id,
@@ -44,3 +60,4 @@ export const createOrderHandlers = (orderService: OrderService, authService: Aut
       return reply.code(201).send(toOrderDto(order))
     },
   })
+}
