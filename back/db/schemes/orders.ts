@@ -41,19 +41,17 @@ export const orders = pgTable(
   (t) => [
     check(
       'orders_delivery_consistency',
-      sql`
-              (${t.deliveryMethod} = 'pickup' AND ${t.shippingAddress} IS NULL)
-              OR
-    (
-              ${t.deliveryMethod}
-              =
-              'delivery'
-              AND
-              ${t.shippingAddress}
-              IS
-              NOT
-              NULL
-              )
+      sql`(${t.deliveryMethod} = 'pickup' AND ${t.shippingAddress} IS NULL)
+          OR(
+          ${t.deliveryMethod}
+          =
+          'delivery'
+          AND
+          ${t.shippingAddress}
+          IS
+          NOT
+          NULL
+          )
       `,
     ),
     check('orders_total_non_negative', sql`${t.total}
