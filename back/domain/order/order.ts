@@ -34,3 +34,11 @@ export type NewOrder = DeliveryInfo & {
   total: number;
   items: NewOrderItem[];
 };
+
+export type  CreateOrderInput = DeliveryInfo & {
+  userId: string;
+  products: {
+    productId: string;
+    quantity: number;
+  }[]
+}

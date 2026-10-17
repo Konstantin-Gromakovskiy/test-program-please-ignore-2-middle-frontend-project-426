@@ -1,89 +1,108 @@
-import { db } from "#db/index.js";
-import { cryptoUtils } from "#lib/cryptoUtils.js";
-import { UnauthorizedError } from "#lib/errors.js";
+import { db } from '#db/index.js'
+import { cryptoUtils } from '#lib/cryptoUtils.js'
+import { UnauthorizedError } from '#lib/errors.js'
 import {
   CategoryRepository,
   ProductRepository,
   SessionRepository,
   UserRepository,
-} from "#repository/index.js";
+  OrderRepository,
+} from '#repository/index.js'
 import {
   AuthService,
   CategoryService,
   ProductService,
-} from "#service/index.js";
-import { createRouteHandlers } from "./routes/index.js";
-import { BaseError } from "./lib/errors.js";
-import type { FastifyInstance, FastifyRequest } from "fastify";
+  OrderService,
+} from '#service/index.js'
+import { createRouteHandlers } from './routes/index.js'
+import { BaseError } from './lib/errors.js'
+import type { FastifyInstance, FastifyRequest } from 'fastify'
+import type { UnitOfWork } from '#service/order/order.types.js'
 
 type ErrorWithStatusCode = Error & { statusCode: number };
 
 function isErrorWithStatusCode(error: unknown): error is ErrorWithStatusCode {
   return (
     error instanceof Error &&
-    "statusCode" in error &&
-    typeof error.statusCode === "number"
-  );
+    'statusCode' in error &&
+    typeof error.statusCode === 'number'
+  )
 }
 
-const userRepository = new UserRepository(db);
-const sessionRepository = new SessionRepository(db);
+const userRepository = new UserRepository(db)
+const sessionRepository = new SessionRepository(db)
 const authService = new AuthService(
   userRepository,
   sessionRepository,
   cryptoUtils,
-);
+)
 
-const categoryRepository = new CategoryRepository(db);
-const categoryService = new CategoryService(categoryRepository);
+const categoryRepository = new CategoryRepository(db)
+const categoryService = new CategoryService(categoryRepository)
 
-const productRepository = new ProductRepository(db);
-const productService = new ProductService(productRepository);
+const productRepository = new ProductRepository(db)
+const productService = new ProductService(productRepository)
+
+const orderUnitOfWork: UnitOfWork = {
+  run: (fn) =>
+    db.transaction((tx) =>
+      fn({
+        productRepository: new ProductRepository(tx),
+        orderRepository: new OrderRepository(tx),
+      }),
+    ),
+}
+
+const orderService = new OrderService(orderUnitOfWork)
 
 export const serviceHandlers = createRouteHandlers({
   authService,
   categoryService,
   productService,
-});
+  orderService,
+})
 
 export const securityHandlers = {
   SessionAuth: async (request: FastifyRequest) => {
-    const token = request.cookies["session"];
-    if (!token) throw new UnauthorizedError("Session is required");
+    const token = request.cookies['session']
+    if (!token) throw new UnauthorizedError('Session is required')
 
-    await authService.validateSession(token);
+    await authService.validateSession(token)
   },
-};
+}
 
 export function configureErrorHandler(fastify: FastifyInstance) {
   fastify.setErrorHandler((error, request, reply) => {
     if (error instanceof BaseError) {
-      return reply.status(error.status).type("application/problem+json").send({
+      return reply.status(error.status).type('application/problem+json').send({
         type: error.type,
         title: error.title,
         status: error.status,
         detail: error.detail,
         instance: request.url,
-      });
+      })
     }
 
     if (isErrorWithStatusCode(error)) {
-      return reply.status(error.statusCode).type("application/problem+json").send({
-        type: "about:blank",
-        title: error.name,
-        status: error.statusCode,
-        detail: error.message,
-        instance: request.url,
-      });
+      return reply
+        .status(error.statusCode)
+        .type('application/problem+json')
+        .send({
+          type: 'about:blank',
+          title: error.name,
+          status: error.statusCode,
+          detail: error.message,
+          instance: request.url,
+        })
     }
 
-    request.log.error(error);
+    request.log.error(error)
 
-    return reply.status(500).type("application/problem+json").send({
-      type: "about:blank",
-      title: "Internal Server Error",
+    return reply.status(500).type('application/problem+json').send({
+      type: 'about:blank',
+      title: 'Internal Server Error',
       status: 500,
       instance: request.url,
-    });
-  });
+    })
+  })
 }

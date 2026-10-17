@@ -19,11 +19,11 @@ model CreateOrderRequest {
   @minItems(1)
   items: CreateOrderItemDto[];
 
-  @doc("Адрес доставки")
+  @doc("Адрес доставки. Если не указан, заказ оформляется на самовывоз")
   @example("г. Москва, ул. Тверская, д. 1, кв. 10")
   @minLength(1)
   @maxLength(512)
-  shippingAddress: string;
+  shippingAddress?: string;
 }
 
 @doc("Позиция заказа: снимок продукта на момент оформления")
@@ -68,13 +68,10 @@ model OrderDto {
   @minValue(0)
   total: int32;
 
-  @doc("Адрес доставки")
+  @doc("Адрес доставки. Отсутствует у заказов с самовывозом")
   @example("г. Москва, ул. Тверская, д. 1, кв. 10")
   @maxLength(512)
-  shippingAddress: string;
-
-  @doc("Дата и время оформления заказа")
-  createdAt: utcDateTime;
+  shippingAddress?: string;
 }
 
 model OrdersPage is Page<OrderDto>;
