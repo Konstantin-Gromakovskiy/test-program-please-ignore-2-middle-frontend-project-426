@@ -84,14 +84,24 @@ export function Header() {
               </Button>
             </Group>
           ) : (
-            <Button
-              type="button"
-              onClick={handleLogout}
-              variant="outline"
-              data-testid="nav-signout"
-            >
-              Выход
-            </Button>
+            <Group>
+              <Anchor
+                renderRoot={(props) => (
+                  <Link to={routes.account} search={{ page: 1 }} {...props} />
+                )}
+                data-testid="nav-account"
+              >
+                Личный кабинет
+              </Anchor>
+              <Button
+                type="button"
+                onClick={handleLogout}
+                variant="outline"
+                data-testid="nav-signout"
+              >
+                Выход
+              </Button>
+            </Group>
           )}
         </Group>
       </Container>

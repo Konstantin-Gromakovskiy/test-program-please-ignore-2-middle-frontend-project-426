@@ -4,6 +4,7 @@ export const routes = {
   catalog: "/catalog",
   cart: "/cart",
   checkout: "/checkout",
+  account: "/account",
   login: "/login",
   register: "/register",
 } as const;
