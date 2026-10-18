@@ -7,12 +7,14 @@ import {
   SessionRepository,
   UserRepository,
   OrderRepository,
+  PromoRepository,
 } from '#repository/index.js'
 import {
   AuthService,
   CategoryService,
   ProductService,
   OrderService,
+  PromoService,
 } from '#service/index.js'
 import { createRouteHandlers } from './routes/index.js'
 import { BaseError } from './lib/errors.js'
@@ -56,10 +58,14 @@ const orderUnitOfWork: UnitOfWork = {
 const orderRepository = new OrderRepository(db)
 const orderService = new OrderService(orderUnitOfWork, orderRepository)
 
+const promoRepository = new PromoRepository(db)
+const promoService = new PromoService(promoRepository)
+
 export const serviceHandlers = createRouteHandlers({
   authService,
   categoryService,
   productService,
+  promoService,
   orderService,
 })
 

@@ -4,6 +4,7 @@ import "./auth/auth.tsp";
 import "./categories/categories.tsp";
 import "./products/products.tsp";
 import "./orders/orders.tsp";
+import "./promos/promos.tsp";
 
 using Http;
 using OpenAPI;
@@ -28,6 +29,10 @@ using OpenAPI;
 @tagMetadata(
   "Orders",
   #{ description: "Методы, отвечающие за оформление и получение заказов" }
+)
+@tagMetadata(
+  "Promos",
+  #{ description: "Методы, отвечающие за промо-блоки главной страницы" }
 )
 @doc("Бекенд сервис магазина комплектующих для пк")
 @route("api")

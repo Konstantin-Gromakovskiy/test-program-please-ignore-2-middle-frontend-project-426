@@ -1,5 +1,5 @@
 import { and, inArray, isNull, eq } from "drizzle-orm";
-import { categories, db, products } from "./index.js";
+import { categories, db, products, promos } from "./index.js";
 
 type SeedProduct = {
   name: string;
@@ -361,6 +361,51 @@ const SEED_PRODUCTS: Record<string, SeedProduct[]> = {
   ],
 };
 
+// Промо главной страницы: «Выбор магазина». Ведут на товары в наличии.
+// Порядок в массиве — порядок показа.
+const SEED_PROMOS = [
+  {
+    productName: "AMD Radeon RX 7600 8 ГБ",
+    title: "Игровой апгрейд",
+    description: "Видеокарта для игр в Full HD и 2K по честной цене",
+  },
+  {
+    productName: "AMD Ryzen 7 7800X3D",
+    title: "Сердце сборки",
+    description: "Процессор с 3D V-Cache: максимум кадров в играх и запас для работы",
+  },
+  {
+    productName: "Noctua NH-D15",
+    title: "Тихий и холодный ПК",
+    description: "Башенный кулер, которому не страшны даже горячие процессоры",
+  },
+];
+
+const seedPromos = async () => {
+  const productRows = await db
+    .select({ id: products.id, name: products.name })
+    .from(products)
+    .where(
+      inArray(
+        products.name,
+        SEED_PROMOS.map(({ productName }) => productName),
+      ),
+    );
+  const productIdByName = new Map(productRows.map((p) => [p.name, p.id]));
+
+  const rows = SEED_PROMOS.map(({ productName, title, description }, position) => {
+    const productId = productIdByName.get(productName);
+    if (!productId) throw new Error(`Товар «${productName}» для промо не найден`);
+
+    return { productId, title, description, position };
+  });
+
+  await db
+    .insert(promos)
+    .values(rows)
+    .onConflictDoNothing({ target: promos.productId });
+};
+
 export const runSeed = async () => {
   await db
     .insert(categories)
@@ -419,4 +464,6 @@ export const runSeed = async () => {
         );
     }
   }
+
+  await seedPromos();
 };
