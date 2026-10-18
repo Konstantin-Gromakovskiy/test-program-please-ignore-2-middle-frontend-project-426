@@ -72,6 +72,8 @@ export default class OrderService {
       const newOrder: NewOrder = {
         status: 'paid',
         ...deliveryInfo,
+        recipientName: data.recipientName,
+        recipientPhone: data.recipientPhone,
         userId: data.userId,
         total,
         items: orderItems,

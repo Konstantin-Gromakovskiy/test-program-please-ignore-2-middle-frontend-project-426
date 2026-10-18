@@ -6,7 +6,12 @@ type DeliveryInfo =
   | { deliveryMethod: 'pickup' }
   | { deliveryMethod: 'delivery', shippingAddress: string };
 
-type BaseOrderData = {
+type RecipientInfo = {
+  recipientName: string;
+  recipientPhone: string;
+}
+
+type BaseOrderData = RecipientInfo & {
   id: string;
   status: 'paid';
   total: number;
@@ -28,7 +33,7 @@ export type OrderItem = {
 
 export type NewOrderItem = Omit<OrderItem, 'id'>
 
-export type NewOrder = DeliveryInfo & {
+export type NewOrder = DeliveryInfo & RecipientInfo & {
   userId: string;
   status: 'paid';
   total: number;
@@ -50,7 +55,7 @@ export type OrdersPage = {
   };
 }
 
-export type CreateOrderInput = DeliveryInfo & {
+export type CreateOrderInput = DeliveryInfo & RecipientInfo & {
   userId: string;
   products: {
     productId: string;

@@ -26,6 +26,8 @@ export const orders = pgTable(
     status: orderStatusEnum('status').notNull(),
     shippingAddress: varchar('shipping_address', { length: 512 }),
     deliveryMethod: deliveryMethodEnum('delivery_method').notNull(),
+    recipientName: varchar('recipient_name', { length: 128 }).notNull(),
+    recipientPhone: varchar('recipient_phone', { length: 16 }).notNull(),
     total: integer('total').notNull(),
     userId: uuid('user_id')
       .notNull()

@@ -1,6 +1,6 @@
 import { defineHandlers } from '#lib/utils.js'
 import type { OrderService, AuthService } from '#service/index.js'
-import { UnauthorizedError } from '#lib/errors.js'
+import { BadRequestError, UnauthorizedError } from '#lib/errors.js'
 import type { Order } from '#domain/order/order.js'
 import type { OrderDto } from '../types/handlers/types.gen.ts'
 import type { FastifyRequest } from 'fastify'
@@ -9,6 +9,9 @@ const toOrderDto = (order: Order): OrderDto => ({
   id: order.id,
   status: order.status,
   total: order.total,
+  deliveryMethod: order.deliveryMethod,
+  recipientName: order.recipientName,
+  recipientPhone: order.recipientPhone,
   items: order.items.map(item => ({
     id: item.id,
     productId: item.productId,
@@ -49,12 +52,22 @@ export const createOrderHandlers = (orderService: OrderService, authService: Aut
     createOrder: async (request, reply) => {
       const { body } = request
       const user = await getSessionUser(request)
-      const { shippingAddress } = body
+      const { deliveryMethod, shippingAddress } = body
+
+      if (deliveryMethod === 'delivery' && !shippingAddress) {
+        throw new BadRequestError('Shipping address is required for delivery')
+      }
+      if (deliveryMethod === 'pickup' && shippingAddress) {
+        throw new BadRequestError('Shipping address is not allowed for pickup')
+      }
+
       const order = await orderService.createOrder({
         userId: user.id,
         products: body.items,
-        ...(shippingAddress
-          ? { deliveryMethod: 'delivery', shippingAddress }
+        recipientName: body.recipientName,
+        recipientPhone: body.recipientPhone,
+        ...(deliveryMethod === 'delivery' && shippingAddress
+          ? { deliveryMethod, shippingAddress }
           : { deliveryMethod: 'pickup' }),
       })
       return reply.code(201).send(toOrderDto(order))

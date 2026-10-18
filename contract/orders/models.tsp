@@ -14,12 +14,29 @@ model CreateOrderItemDto {
   quantity: int32;
 }
 
+alias DeliveryMethod = "delivery" | "pickup";
+
 model CreateOrderRequest {
   @doc("Позиции заказа")
   @minItems(1)
   items: CreateOrderItemDto[];
 
-  @doc("Адрес доставки. Если не указан, заказ оформляется на самовывоз")
+  @doc("Способ получения заказа")
+  @example("delivery")
+  deliveryMethod: DeliveryMethod;
+
+  @doc("Имя получателя")
+  @example("Иван Иванов")
+  @minLength(1)
+  @maxLength(128)
+  recipientName: string;
+
+  @doc("Телефон получателя в формате +7XXXXXXXXXX")
+  @example("+79001234567")
+  @pattern("^\\+7\\d{10}$")
+  recipientPhone: string;
+
+  @doc("Адрес доставки. Обязателен для доставки, для самовывоза не передаётся")
   @example("г. Москва, ул. Тверская, д. 1, кв. 10")
   @minLength(1)
   @maxLength(512)
@@ -67,6 +84,19 @@ model OrderDto {
   @example(3798000)
   @minValue(0)
   total: int32;
+
+  @doc("Способ получения заказа")
+  @example("delivery")
+  deliveryMethod: DeliveryMethod;
+
+  @doc("Имя получателя")
+  @example("Иван Иванов")
+  @maxLength(128)
+  recipientName: string;
+
+  @doc("Телефон получателя в формате +7XXXXXXXXXX")
+  @example("+79001234567")
+  recipientPhone: string;
 
   @doc("Адрес доставки. Отсутствует у заказов с самовывозом")
   @example("г. Москва, ул. Тверская, д. 1, кв. 10")
