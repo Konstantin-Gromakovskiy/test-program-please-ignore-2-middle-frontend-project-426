@@ -1,10 +1,21 @@
-import { Anchor, Box, Center, Loader, Stack, Text, Title } from "@mantine/core";
-import { Link } from "@tanstack/react-router";
-import { routes } from "@/shared/config";
-import { OrderItems, useCartRows } from "@/widgets/order-items";
+import {
+  Anchor,
+  Box,
+  Center,
+  Grid,
+  Loader,
+  Paper,
+  Stack,
+  Text,
+  Title,
+} from '@mantine/core'
+import { Link } from '@tanstack/react-router'
+import { routes } from '@/shared/config'
+import { OrderItems, useCartRows } from '@/widgets/order-items'
+import { CheckoutForm } from './CheckoutForm'
 
 export function CheckoutPage() {
-  const { isEmpty, isPending, rows, total } = useCartRows();
+  const { isEmpty, isPending, rows, total } = useCartRows()
 
   if (isEmpty) {
     return (
@@ -16,7 +27,7 @@ export function CheckoutPage() {
           </Anchor>
         </Stack>
       </Center>
-    );
+    )
   }
 
   if (isPending) {
@@ -24,7 +35,7 @@ export function CheckoutPage() {
       <Center mih="60vh">
         <Loader />
       </Center>
-    );
+    )
   }
 
   return (
@@ -32,14 +43,32 @@ export function CheckoutPage() {
       <Title order={3} mb="md">
         Оформление заказа
       </Title>
-      <Stack gap="lg">
-        <Stack gap="xs" data-testid="checkout-order-composition">
-          <Title order={4}>Состав заказа</Title>
-          <OrderItems rows={rows.filter((row) => row.available)} total={total} />
-        </Stack>
-        <Text data-testid="checkout-delivery">Способ доставки</Text>
-        <Text data-testid="checkout-address">Адрес доставки</Text>
-      </Stack>
+      <Grid gap="md">
+        <Grid.Col span={{ base: 12, md: 8 }}>
+          <Paper withBorder p="md" h="100%">
+            <Title order={4} mb="md">
+              Получение
+            </Title>
+            <CheckoutForm />
+          </Paper>
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, md: 4 }}>
+          <Paper
+            withBorder
+            p="md"
+            h="100%"
+            data-testid="checkout-order-composition"
+          >
+            <Title order={4} mb="md">
+              Состав заказа
+            </Title>
+            <OrderItems
+              rows={rows.filter((row) => row.available)}
+              total={total}
+            />
+          </Paper>
+        </Grid.Col>
+      </Grid>
     </Box>
-  );
+  )
 }
