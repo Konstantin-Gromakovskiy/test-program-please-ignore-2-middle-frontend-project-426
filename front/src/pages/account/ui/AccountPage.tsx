@@ -34,7 +34,7 @@ export function AccountPage() {
         </Alert>
       )}
       {data && data.items.length === 0 && (
-        <Center mih="40vh" data-testid="orders-empty">
+        <Center mih="40vh" data-testid="account-orders-empty">
           <Stack align="center" gap="xs">
             <Text>Заказов пока нет</Text>
             <Anchor component={Link} to={routes.catalog}>

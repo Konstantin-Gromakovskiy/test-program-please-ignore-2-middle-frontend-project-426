@@ -13,6 +13,13 @@ export type OrderLine = {
   quantity: number;
 };
 
+/** Ошибка оформления, готовая к показу. */
+export type OrderErrorView = {
+  message: string;
+  /** Проблемные товары, по одной строке на товар. */
+  problems: string[];
+};
+
 export type CheckoutFormProps = {
   lines: OrderLine[];
 };

@@ -1,39 +1,27 @@
-import { Button, Select, Stack, TextInput } from "@mantine/core";
+import { Alert, Button, List, NativeSelect, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { notifications } from "@mantine/notifications";
 import { useNavigate } from "@tanstack/react-router";
 import { useCartStore } from "@/entities/cart";
 import { useCreateOrderMutation } from "../lib/createOrder.api";
 import { toCreateOrderBody } from "../lib/createOrderBody";
+import { toOrderErrorView } from "../lib/toOrderErrorView";
 import { checkoutFormValidation, deliveryMethodOptions } from "../lib/validation";
-import type {
-  CheckoutFormProps,
-  CheckoutFormValues,
-  DeliveryMethod,
-} from "../model/types";
+import type { CheckoutFormProps, CheckoutFormValues } from "../model/types";
 
 export function CheckoutForm({ lines }: CheckoutFormProps) {
   const navigate = useNavigate();
   const clearCart = useCartStore((state) => state.clear);
 
-  const { mutate: createOrder, isPending } = useCreateOrderMutation({
-    onError: (error) => {
-      notifications.show({
-        color: "red",
-        message: (
-          <span data-testid="checkout-error">
-            {error.status === 409
-              ? "Некоторых товаров не хватает на складе. Проверьте корзину."
-              : "Не удалось оформить заказ. Попробуйте еще раз."}
-          </span>
-        ),
-      });
-    },
+  const {
+    mutate: createOrder,
+    isPending,
+    error,
+  } = useCreateOrderMutation({
     onSuccess: async (order) => {
       // Сначала уходим со страницы, чтобы не мигала «Корзина пуста»
       await navigate({
-        to: "/orders/$orderId",
-        params: { orderId: order.id },
+        to: "/checkout/success",
+        search: { orderId: order.id },
       });
       clearCart();
     },
@@ -53,24 +41,28 @@ export function CheckoutForm({ lines }: CheckoutFormProps) {
     createOrder({ body: toCreateOrderBody(values, lines) });
   }
 
+  const errorView = error && toOrderErrorView(error);
+
   return (
     <form onSubmit={form.onSubmit(handleSubmit)} data-testid="checkout-form">
       <Stack>
-        <Select
+        <NativeSelect
           label="Способ получения"
           data={deliveryMethodOptions}
-          allowDeselect={false}
-          data-testid="checkout-delivery-method"
+          data-testid="checkout-method"
           {...form.getInputProps("deliveryMethod")}
-          onChange={(value) => {
-            form.setFieldValue("deliveryMethod", value as DeliveryMethod);
+          onChange={(event) => {
+            form.setFieldValue(
+              "deliveryMethod",
+              event.currentTarget.value as CheckoutFormValues["deliveryMethod"],
+            );
             form.clearFieldError("address");
           }}
         />
         <TextInput
           label="Имя получателя"
           autoComplete="name"
-          data-testid="checkout-recipient-name"
+          data-testid="checkout-name"
           {...form.getInputProps("recipientName")}
         />
         <TextInput
@@ -89,6 +81,18 @@ export function CheckoutForm({ lines }: CheckoutFormProps) {
             data-testid="checkout-address"
             {...form.getInputProps("address")}
           />
+        )}
+        {errorView && (
+          <Alert color="red" data-testid="order-error">
+            {errorView.message}
+            {errorView.problems.length > 0 && (
+              <List size="sm" mt="xs">
+                {errorView.problems.map((problem) => (
+                  <List.Item key={problem}>{problem}</List.Item>
+                ))}
+              </List>
+            )}
+          </Alert>
         )}
         <Button
           type="submit"

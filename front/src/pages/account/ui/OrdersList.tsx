@@ -10,7 +10,7 @@ export function OrdersList({
 }: OrdersListProps) {
   return (
     <div>
-      <Stack gap="md" data-testid="orders-list">
+      <Stack gap="md" data-testid="account-orders">
         {orders.map((order) => (
           <OrderCard key={order.id} {...order} />
         ))}

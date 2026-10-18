@@ -11,21 +11,35 @@ import {
 } from "@mantine/core";
 import { Link, getRouteApi } from "@tanstack/react-router";
 import { formatPrice } from "@/entities/product";
-import { useGetOrderQuery } from "@/shared/api";
+import { useQuery } from "@tanstack/react-query";
+import { getOrderOptions } from "@/shared/api";
 import { routes } from "@/shared/config";
 import { OrderItems } from "@/widgets/order-items";
 import { toOrderDelivery, toOrderRows } from "../lib/toOrderView";
 import { OrderDeliveryInfo } from "./OrderDeliveryInfo";
 
-const route = getRouteApi("/_authenticated/orders/$orderId");
+const route = getRouteApi("/_authenticated/checkout_/success");
 
 export function OrderSuccessPage() {
-  const { orderId } = route.useParams();
+  const { orderId } = route.useSearch();
   const {
     data: order,
     isPending,
     isError,
-  } = useGetOrderQuery({ path: { id: orderId } });
+  } = useQuery({
+    ...getOrderOptions({ path: { id: orderId } }),
+    enabled: orderId !== "",
+  });
+
+  if (orderId === "") {
+    return (
+      <Box p="xs">
+        <Alert color="red" data-testid="order-error">
+          Заказ не найден
+        </Alert>
+      </Box>
+    );
+  }
 
   if (isPending) {
     return (
@@ -46,7 +60,7 @@ export function OrderSuccessPage() {
   }
 
   return (
-    <Box p="xs" data-testid="order-success-page">
+    <Box p="xs" data-testid="order-success">
       <Title order={3} mb="xs">
         Заказ оформлен
       </Title>

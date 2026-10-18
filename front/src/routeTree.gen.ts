@@ -19,7 +19,7 @@ import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated/account'
 import { Route as AuthenticatedCheckoutRouteImport } from './routes/_authenticated/checkout'
 import { Route as ProductsProductIdRouteImport } from './routes/products.$productId'
-import { Route as AuthenticatedOrdersOrderIdRouteImport } from './routes/_authenticated/orders.$orderId'
+import { Route as AuthenticatedCheckoutSuccessRouteImport } from './routes/_authenticated/checkout_.success'
 
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
@@ -70,10 +70,10 @@ const ProductsProductIdRoute = ProductsProductIdRouteImport.update({
   path: '/products/$productId',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedOrdersOrderIdRoute =
-  AuthenticatedOrdersOrderIdRouteImport.update({
-    id: '/orders/$orderId',
-    path: '/orders/$orderId',
+const AuthenticatedCheckoutSuccessRoute =
+  AuthenticatedCheckoutSuccessRouteImport.update({
+    id: '/checkout_/success',
+    path: '/checkout/success',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 
@@ -87,7 +87,7 @@ export interface FileRoutesByFullPath {
   '/account': typeof AuthenticatedAccountRoute
   '/checkout': typeof AuthenticatedCheckoutRoute
   '/products/$productId': typeof ProductsProductIdRoute
-  '/orders/$orderId': typeof AuthenticatedOrdersOrderIdRoute
+  '/checkout/success': typeof AuthenticatedCheckoutSuccessRoute
 }
 export interface FileRoutesByTo {
   '/about': typeof AboutRoute
@@ -99,7 +99,7 @@ export interface FileRoutesByTo {
   '/checkout': typeof AuthenticatedCheckoutRoute
   '/products/$productId': typeof ProductsProductIdRoute
   '/': typeof AuthenticatedIndexRoute
-  '/orders/$orderId': typeof AuthenticatedOrdersOrderIdRoute
+  '/checkout/success': typeof AuthenticatedCheckoutSuccessRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -113,7 +113,7 @@ export interface FileRoutesById {
   '/_authenticated/checkout': typeof AuthenticatedCheckoutRoute
   '/products/$productId': typeof ProductsProductIdRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
-  '/_authenticated/orders/$orderId': typeof AuthenticatedOrdersOrderIdRoute
+  '/_authenticated/checkout_/success': typeof AuthenticatedCheckoutSuccessRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -127,7 +127,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/checkout'
     | '/products/$productId'
-    | '/orders/$orderId'
+    | '/checkout/success'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/about'
@@ -139,7 +139,7 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/products/$productId'
     | '/'
-    | '/orders/$orderId'
+    | '/checkout/success'
   id:
     | '__root__'
     | '/_authenticated'
@@ -152,7 +152,7 @@ export interface FileRouteTypes {
     | '/_authenticated/checkout'
     | '/products/$productId'
     | '/_authenticated/'
-    | '/_authenticated/orders/$orderId'
+    | '/_authenticated/checkout_/success'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -237,11 +237,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductsProductIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/orders/$orderId': {
-      id: '/_authenticated/orders/$orderId'
-      path: '/orders/$orderId'
-      fullPath: '/orders/$orderId'
-      preLoaderRoute: typeof AuthenticatedOrdersOrderIdRouteImport
+    '/_authenticated/checkout_/success': {
+      id: '/_authenticated/checkout_/success'
+      path: '/checkout/success'
+      fullPath: '/checkout/success'
+      preLoaderRoute: typeof AuthenticatedCheckoutSuccessRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
   }
@@ -251,14 +251,14 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAccountRoute: typeof AuthenticatedAccountRoute
   AuthenticatedCheckoutRoute: typeof AuthenticatedCheckoutRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
-  AuthenticatedOrdersOrderIdRoute: typeof AuthenticatedOrdersOrderIdRoute
+  AuthenticatedCheckoutSuccessRoute: typeof AuthenticatedCheckoutSuccessRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAccountRoute: AuthenticatedAccountRoute,
   AuthenticatedCheckoutRoute: AuthenticatedCheckoutRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
-  AuthenticatedOrdersOrderIdRoute: AuthenticatedOrdersOrderIdRoute,
+  AuthenticatedCheckoutSuccessRoute: AuthenticatedCheckoutSuccessRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(

@@ -1,3 +1,8 @@
+/** Параметры страницы успеха в URL. */
+export type OrderSuccessSearch = {
+  orderId: string;
+};
+
 /** Получатель и способ получения, готовые к показу. */
 export type OrderDelivery = {
   methodLabel: string;
