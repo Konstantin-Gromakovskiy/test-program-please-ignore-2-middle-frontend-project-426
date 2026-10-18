@@ -16,6 +16,7 @@ type BaseOrderData = RecipientInfo & {
   status: 'paid';
   total: number;
   userId: string;
+  createdAt: Date;
   items: OrderItem[];
 }
 

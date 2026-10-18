@@ -10,6 +10,7 @@ import {
   or,
   inArray,
 } from 'drizzle-orm'
+import { sql } from 'drizzle-orm'
 import type { SQL } from 'drizzle-orm'
 import { categories, type DbOrTx, products } from '#db/index.js'
 import type {
@@ -74,6 +75,14 @@ export class ProductRepository {
       .from(products)
       .innerJoin(categories, eq(products.categoryId, categories.id))
       .where(inArray(products.id, ids)).orderBy(asc(products.id)).for('update', { of: products })
+  }
+
+  /** Списывает остаток. Вызывать после проверки наличия в той же транзакции. */
+  async decreaseStock(id: string, quantity: number) {
+    await this.db
+      .update(products)
+      .set({ stock: sql`${products.stock} - ${quantity}` })
+      .where(eq(products.id, id))
   }
 
   async getProducts({

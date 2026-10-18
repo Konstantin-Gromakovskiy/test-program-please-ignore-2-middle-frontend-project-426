@@ -1,5 +1,37 @@
 import "../common/pagination.tsp";
 import "../products/models.tsp";
+import "../common/error.tsp";
+import "@typespec/http";
+
+using Http;
+
+@doc("Товар, который нельзя заказать в запрошенном количестве")
+model StockProblemDto {
+  @doc("Идентификатор продукта")
+  @format("uuid")
+  productId: string;
+
+  @doc("Название продукта")
+  name: string;
+
+  @doc("Сколько единиц запросили")
+  @example(5)
+  requested: int32;
+
+  @doc("Сколько единиц есть на складе")
+  @example(2)
+  available: int32;
+}
+
+@doc("Заказ нельзя оформить: на складе не хватает товаров")
+@error
+model OutOfStockError extends Error.ProblemDetails {
+  @statusCode statusCode: 409;
+  status: 409;
+
+  @doc("Перечень проблемных товаров")
+  problems: StockProblemDto[];
+}
 
 model CreateOrderItemDto {
   @doc("Идентификатор продукта")
@@ -76,6 +108,9 @@ model OrderDto {
 
   @doc("Статус заказа. Заказ оплачивается сразу при оформлении")
   status: "paid";
+
+  @doc("Дата и время оформления заказа")
+  createdAt: utcDateTime;
 
   @doc("Позиции заказа")
   items: OrderItemDto[];

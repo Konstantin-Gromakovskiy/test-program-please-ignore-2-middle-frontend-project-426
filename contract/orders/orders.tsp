@@ -23,7 +23,7 @@ interface Orders {
       }
     | Error.UnauthorizedError
     | Error.BadRequestError
-    | Error.ConflictError
+    | OutOfStockError
     | Error.NotFoundError;
 
   @doc("Список заказов текущего пользователя, новые первыми")

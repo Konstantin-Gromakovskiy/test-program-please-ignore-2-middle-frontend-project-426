@@ -35,6 +35,19 @@ export class ConflictError extends BaseError {
   status = 409;
 }
 
+export type StockProblem = {
+  productId: string;
+  name: string;
+  requested: number;
+  available: number;
+};
+
+export class OutOfStockError extends ConflictError {
+  constructor(readonly problems: StockProblem[]) {
+    super("Not enough stock for some products");
+  }
+}
+
 export class InternalServerError extends BaseError {
   title = "Internal Server Error";
   status = 500;

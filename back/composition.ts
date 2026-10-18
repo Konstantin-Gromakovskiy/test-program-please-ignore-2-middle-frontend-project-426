@@ -1,6 +1,6 @@
 import { db } from '#db/index.js'
 import { cryptoUtils } from '#lib/cryptoUtils.js'
-import { UnauthorizedError } from '#lib/errors.js'
+import { OutOfStockError, UnauthorizedError } from '#lib/errors.js'
 import {
   CategoryRepository,
   ProductRepository,
@@ -81,6 +81,7 @@ export function configureErrorHandler(fastify: FastifyInstance) {
         status: error.status,
         detail: error.detail,
         instance: request.url,
+        ...(error instanceof OutOfStockError && { problems: error.problems }),
       })
     }
 

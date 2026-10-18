@@ -9,6 +9,7 @@ const toOrderDto = (order: Order): OrderDto => ({
   id: order.id,
   status: order.status,
   total: order.total,
+  createdAt: order.createdAt.toISOString(),
   deliveryMethod: order.deliveryMethod,
   recipientName: order.recipientName,
   recipientPhone: order.recipientPhone,

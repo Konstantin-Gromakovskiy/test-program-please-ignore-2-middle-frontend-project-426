@@ -1,6 +1,7 @@
 import type { GetOrdersParams, OrderRepository, UnitOfWork } from './order.types.js'
 import type { CreateOrderInput, NewOrder, NewOrderItem, Order, OrdersPage } from '#domain/order/order.js'
-import { BadRequestError, NotFoundError } from '#lib/errors.js'
+import { BadRequestError, NotFoundError, OutOfStockError } from '#lib/errors.js'
+import type { StockProblem } from '#lib/errors.js'
 
 export default class OrderService {
   constructor(
@@ -63,6 +64,18 @@ export default class OrderService {
           imageUrl: product.imageUrl,
         }
       })
+
+      const problems: StockProblem[] = products.flatMap(({ productId, quantity }) => {
+        const product = productById.get(productId)
+        return product && product.stock < quantity
+          ? [{ productId, name: product.name, requested: quantity, available: product.stock }]
+          : []
+      })
+      if (problems.length > 0) throw new OutOfStockError(problems)
+
+      for (const { productId, quantity } of products) {
+        await productRepository.decreaseStock(productId, quantity)
+      }
 
       const deliveryInfo = data.deliveryMethod === 'pickup' ? { deliveryMethod: data.deliveryMethod }
         : { deliveryMethod: data.deliveryMethod, shippingAddress: data.shippingAddress }

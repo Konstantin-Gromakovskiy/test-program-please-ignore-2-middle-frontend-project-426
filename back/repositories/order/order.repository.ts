@@ -6,7 +6,7 @@ import { orders, orderItems } from '#db/index.js'
 type OrderRow = typeof orders.$inferSelect
 
 const toOrder = (row: OrderRow, items: OrderItem[]): Order => {
-  const { createdAt: _createdAt, updatedAt: _updatedAt, shippingAddress, deliveryMethod, ...orderInfo } = row
+  const { updatedAt: _updatedAt, shippingAddress, deliveryMethod, ...orderInfo } = row
 
   if (deliveryMethod === 'delivery') {
     if (!shippingAddress) {
