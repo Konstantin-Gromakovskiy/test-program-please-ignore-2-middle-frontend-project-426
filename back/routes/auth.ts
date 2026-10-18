@@ -12,7 +12,9 @@ const setSessionCookie = (
     httpOnly: true,
     expires: tokenData.expiresAt,
     path: '/',
-    secure: process.env?.['NODE_ENV'] === 'production',
+    // Secure только для https (за прокси — по X-Forwarded-Proto, см. trustProxy в app.ts):
+    // по http браузер такую куку выбросил бы, и вход перестал бы работать
+    secure: 'auto',
     sameSite: 'lax',
   })
 

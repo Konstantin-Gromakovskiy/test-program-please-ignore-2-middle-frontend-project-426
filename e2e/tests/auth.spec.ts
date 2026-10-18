@@ -96,3 +96,23 @@ test("неавторизованный посетитель не попадае�
   await expect(page).toHaveURL("/login");
   await expect(page.getByText("Welcome Home!")).toBeHidden();
 });
+
+test("кука сессии помечается Secure только для https", async ({ request }) => {
+  const stamp = Date.now();
+
+  // Обычный http: браузер выбросил бы Secure-куку, и вход не заработал бы
+  const overHttp = await request.post("/api/auth/register", {
+    data: { email: `cookie-http-${stamp}@test.com`, password: "12345678" },
+  });
+  expect(overHttp.status()).toBe(201);
+  expect(overHttp.headers()["set-cookie"]).toContain("session=");
+  expect(overHttp.headers()["set-cookie"]).not.toMatch(/;\s*Secure/i);
+
+  // За прокси, который терминирует TLS, схему сообщает X-Forwarded-Proto
+  const behindProxy = await request.post("/api/auth/register", {
+    data: { email: `cookie-https-${stamp}@test.com`, password: "12345678" },
+    headers: { "x-forwarded-proto": "https" },
+  });
+  expect(behindProxy.status()).toBe(201);
+  expect(behindProxy.headers()["set-cookie"]).toMatch(/;\s*Secure/i);
+});

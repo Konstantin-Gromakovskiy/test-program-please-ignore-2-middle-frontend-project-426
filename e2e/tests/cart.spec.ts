@@ -1,5 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 import { products } from "../db/catalog.js";
+import { rubles } from "../fixtures/orders.js";
 
 const findProduct = (name: string) => {
   const found = products.find((item) => item.name === name);
@@ -10,12 +11,6 @@ const findProduct = (name: string) => {
 const inStock = findProduct("AMD Ryzen 5 7600");
 const outOfStock = findProduct("AMD Ryzen 9 7950X");
 
-// тот же формат, что в приложении: цена в базе хранится в копейках
-const formatter = new Intl.NumberFormat("ru-RU", {
-  style: "currency",
-  currency: "RUB",
-});
-const rubles = (kopecks: number) => formatter.format(kopecks / 100);
 
 const items = (page: Page) => page.getByTestId("cart-item");
 
@@ -138,4 +133,21 @@ test("пустая корзина показывает своё состояни
   await expect(page.getByTestId("cart-empty")).toBeVisible();
   await expect(items(page)).toHaveCount(0);
   await expect(page.getByTestId("cart-checkout")).toBeHidden();
+});
+
+test.describe("мобильный экран", () => {
+  test.use({ viewport: { width: 390, height: 844 } });
+
+  test("у корзины нет горизонтальной прокрутки", async ({ page }) => {
+    await addToCart(page, inStock.name);
+    await expect(items(page)).toHaveCount(1);
+
+    const overflow = await page.evaluate(
+      () =>
+        document.documentElement.scrollWidth -
+        document.documentElement.clientWidth,
+    );
+
+    expect(overflow).toBeLessThanOrEqual(0);
+  });
 });

@@ -19,7 +19,7 @@ if (!PORT) throw new Error("PORT is not set");
 
 if (SENTRY_DSN) Sentry.init({ dsn: SENTRY_DSN, environment: NODE_ENV });
 
-const fastify = Fastify({ logger: true });
+const fastify = Fastify({ logger: true, trustProxy: true });
 configureErrorHandler(fastify);
 const contractRoot = path.resolve(process.cwd(), "../contract");
 const OPENAPI_SPECIFICATION = path.join(
