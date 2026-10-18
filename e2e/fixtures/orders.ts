@@ -44,6 +44,37 @@ export async function seedCart(
   }, items);
 }
 
+/**
+ * Запрос от имени авторизованной страницы — через fetch в браузере.
+ * Клиент page.request не отправляет Secure-куку по http (так в CI), браузер отправляет.
+ */
+export async function apiFetch(
+  page: Page,
+  method: "GET" | "POST",
+  url: string,
+  body?: unknown,
+) {
+  if (page.url() === "about:blank") await page.goto("/");
+
+  return page.evaluate(
+    async (args) => {
+      const response = await fetch(args.url, {
+        method: args.method,
+        credentials: "same-origin",
+        ...(args.body !== undefined && {
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify(args.body),
+        }),
+      });
+      return {
+        status: response.status,
+        body: (await response.json().catch(() => null)) as unknown,
+      };
+    },
+    { method, url, body },
+  );
+}
+
 export async function getProductId(request: APIRequestContext, name: string) {
   const response = await request.get("/api/products", {
     params: { search: name },

@@ -2,6 +2,7 @@ import { expect, test } from "../fixtures/users.js";
 import { setProductPrice } from "../db/db.js";
 import {
   addToCartAndCheckout,
+  apiFetch,
   deliveryData,
   fillCheckoutForm,
   findProduct,
@@ -62,10 +63,8 @@ test("пустую корзину оформить нельзя", async ({ page,
   await expect(page.getByTestId("checkout-empty")).toBeVisible();
   await expect(page.getByTestId("checkout-form")).toBeHidden();
 
-  const response = await page.request.post("/api/orders", {
-    data: pickupOrderBody([]),
-  });
-  expect(response.status()).toBe(400);
+  const response = await apiFetch(page, "POST", "/api/orders", pickupOrderBody([]));
+  expect(response.status).toBe(400);
 });
 
 test("итоговая сумма считается на сервере и не зависит от данных клиента", async ({
@@ -75,8 +74,11 @@ test("итоговая сумма считается на сервере и не
   const firstId = await getProductId(page.request, cheap.name);
   const secondId = await getProductId(page.request, other.name);
 
-  const response = await page.request.post("/api/orders", {
-    data: pickupOrderBody(
+  const response = await apiFetch(
+    page,
+    "POST",
+    "/api/orders",
+    pickupOrderBody(
       [
         { productId: firstId, quantity: 2 },
         { productId: secondId, quantity: 3 },
@@ -84,10 +86,10 @@ test("итоговая сумма считается на сервере и не
       // клиент пытается подсунуть свои цифры
       { total: 1, unitPrice: 1, price: 1 },
     ),
-  });
+  );
 
-  expect(response.status()).toBe(201);
-  const order = (await response.json()) as {
+  expect(response.status).toBe(201);
+  const order = response.body as {
     total: number;
     items: { productId: string; unitPrice: number; quantity: number }[];
   };
@@ -136,15 +138,21 @@ test("сервер отклоняет доставку без адреса и с
   const productId = await getProductId(page.request, cheap.name);
   const items = [{ productId, quantity: 1 }];
 
-  const noAddress = await page.request.post("/api/orders", {
-    data: pickupOrderBody(items, { deliveryMethod: "delivery" }),
-  });
-  expect(noAddress.status()).toBe(400);
+  const noAddress = await apiFetch(
+    page,
+    "POST",
+    "/api/orders",
+    pickupOrderBody(items, { deliveryMethod: "delivery" }),
+  );
+  expect(noAddress.status).toBe(400);
 
-  const extraAddress = await page.request.post("/api/orders", {
-    data: pickupOrderBody(items, { shippingAddress: "г. Москва" }),
-  });
-  expect(extraAddress.status()).toBe(400);
+  const extraAddress = await apiFetch(
+    page,
+    "POST",
+    "/api/orders",
+    pickupOrderBody(items, { shippingAddress: "г. Москва" }),
+  );
+  expect(extraAddress.status).toBe(400);
 });
 
 test("заказ с недоступным товаром отклоняется целиком, ошибка видна пользователю", async ({
@@ -185,8 +193,8 @@ test("заказ с недоступным товаром отклоняется
   await expect(page.getByTestId("order-success")).toBeHidden();
 
   // заказ не создан, остаток доступного товара не изменился
-  const orders = await page.request.get("/api/orders");
-  expect(((await orders.json()) as { items: unknown[] }).items).toHaveLength(0);
+  const orders = await apiFetch(page, "GET", "/api/orders");
+  expect((orders.body as { items: unknown[] }).items).toHaveLength(0);
   expect(await getStock(page.request, availableId)).toBe(stockBefore);
 });
 
@@ -197,10 +205,13 @@ test("в личном кабинете видны заказы пользова�
   authenticatedUser: _user,
 }) => {
   const productId = await getProductId(page.request, cheap.name);
-  const created = await page.request.post("/api/orders", {
-    data: pickupOrderBody([{ productId, quantity: 1 }]),
-  });
-  expect(created.status()).toBe(201);
+  const created = await apiFetch(
+    page,
+    "POST",
+    "/api/orders",
+    pickupOrderBody([{ productId, quantity: 1 }]),
+  );
+  expect(created.status).toBe(201);
 
   await page.goto("/account");
   await expect(page.getByTestId("account-order-item")).toHaveCount(1);
@@ -218,8 +229,8 @@ test("в личном кабинете видны заказы пользова�
     await expect(otherPage.getByTestId("account-orders-empty")).toBeVisible();
     await expect(otherPage.getByTestId("account-order-item")).toHaveCount(0);
 
-    const orders = await otherContext.request.get("/api/orders");
-    expect(((await orders.json()) as { items: unknown[] }).items).toHaveLength(0);
+    const orders = await apiFetch(otherPage, "GET", "/api/orders");
+    expect((orders.body as { items: unknown[] }).items).toHaveLength(0);
   } finally {
     await otherContext.close();
   }
@@ -234,13 +245,16 @@ test("открытый заказ показывает состав, колич�
   const repricedId = await getProductId(page.request, repriced.name);
   const cheapId = await getProductId(page.request, cheap.name);
 
-  const created = await page.request.post("/api/orders", {
-    data: pickupOrderBody([
+  const created = await apiFetch(
+    page,
+    "POST",
+    "/api/orders",
+    pickupOrderBody([
       { productId: repricedId, quantity: 2 },
       { productId: cheapId, quantity: 1 },
     ]),
-  });
-  expect(created.status()).toBe(201);
+  );
+  expect(created.status).toBe(201);
 
   // после покупки цена товара выросла: в заказе должна остаться старая
   await setProductPrice(repriced.name, repriced.price * 2);
