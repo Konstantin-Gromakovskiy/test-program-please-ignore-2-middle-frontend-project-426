@@ -11,7 +11,9 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
+import { useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate } from "@tanstack/react-router";
+import { meQueryKey } from "@/shared/api";
 import { routes } from "@/shared/config";
 import { registerFormValidation } from "../lib/validation";
 import { useRegisterMutation } from "../lib/register.api.ts";
@@ -30,8 +32,13 @@ export function RegisterForm() {
         ),
       });
     },
-    onSuccess: async () => await navigate({ to: routes.home }),
+    onSuccess: async (user) => {
+      // Главная публична, шапка уже закешировала «гость»: обновляем вручную
+      queryClient.setQueryData(meQueryKey(), user);
+      await navigate({ to: routes.home });
+    },
   });
+  const queryClient = useQueryClient();
   const navigate = useNavigate({ from: routes.register });
 
   const [hasValidationErrors, setHasValidationErrors] = useState(false);

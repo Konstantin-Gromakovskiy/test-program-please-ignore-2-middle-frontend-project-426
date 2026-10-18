@@ -40,7 +40,7 @@ test("после выхода защищенная страница перест
   await expect(page).toHaveURL("/login");
   await expect(page.getByTestId("nav-signin")).toBeVisible();
 
-  await page.goto("/");
+  await page.goto("/account");
   await expect(page).toHaveURL("/login");
 });
 
@@ -91,10 +91,18 @@ test("после перезагрузки страницы пользовате�
 test("неавторизованный посетитель не попадает на защищенную страницу по прямому адресу", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/account");
 
   await expect(page).toHaveURL("/login");
-  await expect(page.getByText("Welcome Home!")).toBeHidden();
+  await expect(page.getByTestId("account-page")).toBeHidden();
+});
+
+test("главная открыта гостю без перенаправления на вход", async ({ page }) => {
+  await page.goto("/");
+
+  await expect(page).toHaveURL("/");
+  await expect(page.getByTestId("home-page")).toBeVisible();
+  await expect(page.getByTestId("nav-signin")).toBeVisible();
 });
 
 test("кука сессии помечается Secure только для https", async ({ request }) => {

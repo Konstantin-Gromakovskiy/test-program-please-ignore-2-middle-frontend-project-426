@@ -10,12 +10,15 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
+import { useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate } from "@tanstack/react-router";
+import { meQueryKey } from "@/shared/api";
 import { routes } from "@/shared/config";
 import { useLoginMutation } from "../lib/login.api";
 
 export function LoginForm() {
   const navigate = useNavigate({ from: routes.login });
+  const queryClient = useQueryClient();
   const { mutate: login, isPending } = useLoginMutation({
     onError: (error) => {
       notifications.show({
@@ -29,7 +32,11 @@ export function LoginForm() {
         ),
       });
     },
-    onSuccess: async () => await navigate({ to: routes.home }),
+    onSuccess: async (user) => {
+      // Главная публична, шапка уже закешировала «гость»: обновляем вручную
+      queryClient.setQueryData(meQueryKey(), user);
+      await navigate({ to: routes.home });
+    },
   });
 
   const form = useForm({

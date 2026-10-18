@@ -69,6 +69,25 @@ export const products: CatalogProduct[] = [
   product("ram", "Kingston ValueRAM 4 ГБ DDR3-1600", 59000, 15),
 ];
 
+/** Промо главной. Ведут на товары в наличии, порядок массива — порядок показа. */
+export const promos = [
+  {
+    productName: "AMD Radeon RX 7600",
+    title: "Игровой апгрейд",
+    description: "Видеокарта для игр в Full HD и 2K по честной цене",
+  },
+  {
+    productName: "AMD Ryzen 7 7800X3D",
+    title: "Сердце сборки",
+    description: "Процессор с 3D V-Cache для игр и работы",
+  },
+  {
+    productName: "NVIDIA GeForce RTX 4060",
+    title: "Новинка в наличии",
+    description: "Видеокарта с DLSS 3 для комфортной игры в 1080p",
+  },
+];
+
 export async function seedCatalog() {
   if (!url) throw new Error("E2E_DATABASE_URL или DATABASE_URL не задан");
 
@@ -95,6 +114,14 @@ export async function seedCatalog() {
           item.stock,
           idBySlug.get(item.categorySlug),
         ],
+      );
+    }
+
+    for (const [position, promo] of promos.entries()) {
+      await client.query(
+        `insert into promos (product_id, title, description, position)
+         select id, $2, $3, $4 from products where name = $1`,
+        [promo.productName, promo.title, promo.description, position],
       );
     }
   } finally {
