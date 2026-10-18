@@ -10,6 +10,13 @@ front-install:
 	cd front && npm install
 back-install:
 	cd back && npm install
+contract-install:
+	cd contract && npm install
+e2e-install:
+	cd e2e && npm install
+
+# установка зависимостей всех пакетов (её вызывает автопроверка Хекслета)
+setup: front-install back-install contract-install e2e-install
 db-setup:
 	cd back && npm run db:setup
 start:

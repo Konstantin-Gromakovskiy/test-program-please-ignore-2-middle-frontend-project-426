@@ -1,0 +1,8 @@
+{
+  "name": "@hexlet/code",
+  "private": true,
+  "description": "Корневой пакет нужен автопроверке Хекслета. Приложение состоит из front, back, contract и e2e со своими package.json",
+  "devDependencies": {
+    "dotenv": "^18.0.5"
+  }
+}
