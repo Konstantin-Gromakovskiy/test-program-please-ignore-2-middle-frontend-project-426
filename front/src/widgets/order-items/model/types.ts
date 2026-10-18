@@ -21,7 +21,13 @@ export type CartEntry = {
   quantity: number;
 };
 
+/** Минимум, нужный для показа позиции: подходит и корзине, и готовому заказу. */
+export type OrderItemRow = Pick<
+  CartRow,
+  "id" | "name" | "imageUrl" | "unitPrice" | "quantity" | "lineTotal"
+>;
+
 export type OrderItemsProps = {
-  rows: CartRow[];
+  rows: OrderItemRow[];
   total: string;
 };

@@ -3,7 +3,6 @@ import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { useNavigate } from "@tanstack/react-router";
 import { useCartStore } from "@/entities/cart";
-import { routes } from "@/shared/config";
 import { useCreateOrderMutation } from "../lib/createOrder.api";
 import { toCreateOrderBody } from "../lib/createOrderBody";
 import { checkoutFormValidation, deliveryMethodOptions } from "../lib/validation";
@@ -30,10 +29,13 @@ export function CheckoutForm({ lines }: CheckoutFormProps) {
         ),
       });
     },
-    onSuccess: async () => {
+    onSuccess: async (order) => {
+      // Сначала уходим со страницы, чтобы не мигала «Корзина пуста»
+      await navigate({
+        to: "/orders/$orderId",
+        params: { orderId: order.id },
+      });
       clearCart();
-      notifications.show({ color: "green", message: "Заказ оформлен" });
-      await navigate({ to: routes.catalog, search: { page: 1 } });
     },
   });
 
