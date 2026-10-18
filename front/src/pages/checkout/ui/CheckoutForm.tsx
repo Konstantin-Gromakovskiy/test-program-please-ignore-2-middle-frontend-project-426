@@ -1,9 +1,42 @@
 import { Button, Select, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { notifications } from "@mantine/notifications";
+import { useNavigate } from "@tanstack/react-router";
+import { useCartStore } from "@/entities/cart";
+import { routes } from "@/shared/config";
+import { useCreateOrderMutation } from "../lib/createOrder.api";
+import { toCreateOrderBody } from "../lib/createOrderBody";
 import { checkoutFormValidation, deliveryMethodOptions } from "../lib/validation";
-import type { CheckoutFormValues, DeliveryMethod } from "../model/types";
+import type {
+  CheckoutFormProps,
+  CheckoutFormValues,
+  DeliveryMethod,
+} from "../model/types";
 
-export function CheckoutForm() {
+export function CheckoutForm({ lines }: CheckoutFormProps) {
+  const navigate = useNavigate();
+  const clearCart = useCartStore((state) => state.clear);
+
+  const { mutate: createOrder, isPending } = useCreateOrderMutation({
+    onError: (error) => {
+      notifications.show({
+        color: "red",
+        message: (
+          <span data-testid="checkout-error">
+            {error.status === 409
+              ? "Некоторых товаров не хватает на складе. Проверьте корзину."
+              : "Не удалось оформить заказ. Попробуйте еще раз."}
+          </span>
+        ),
+      });
+    },
+    onSuccess: async () => {
+      clearCart();
+      notifications.show({ color: "green", message: "Заказ оформлен" });
+      await navigate({ to: routes.catalog, search: { page: 1 } });
+    },
+  });
+
   const form = useForm<CheckoutFormValues>({
     initialValues: {
       deliveryMethod: "delivery",
@@ -15,7 +48,7 @@ export function CheckoutForm() {
   });
 
   function handleSubmit(values: CheckoutFormValues) {
-    console.log("Данные оформления заказа:", values);
+    createOrder({ body: toCreateOrderBody(values, lines) });
   }
 
   return (
@@ -55,7 +88,12 @@ export function CheckoutForm() {
             {...form.getInputProps("address")}
           />
         )}
-        <Button type="submit" data-testid="checkout-submit">
+        <Button
+          type="submit"
+          loading={isPending}
+          disabled={lines.length === 0}
+          data-testid="checkout-submit"
+        >
           Оформить заказ
         </Button>
       </Stack>

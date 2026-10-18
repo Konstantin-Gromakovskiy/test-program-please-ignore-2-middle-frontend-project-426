@@ -38,6 +38,12 @@ export function CheckoutPage() {
     )
   }
 
+  const availableRows = rows.filter((row) => row.available)
+  const lines = availableRows.map(({ id, quantity }) => ({
+    productId: id,
+    quantity,
+  }))
+
   return (
     <Box p="xs" data-testid="checkout-page">
       <Title order={3} mb="md">
@@ -49,7 +55,7 @@ export function CheckoutPage() {
             <Title order={4} mb="md">
               Получение
             </Title>
-            <CheckoutForm />
+            <CheckoutForm lines={lines} />
           </Paper>
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 4 }}>
@@ -62,10 +68,7 @@ export function CheckoutPage() {
             <Title order={4} mb="md">
               Состав заказа
             </Title>
-            <OrderItems
-              rows={rows.filter((row) => row.available)}
-              total={total}
-            />
+            <OrderItems rows={availableRows} total={total} />
           </Paper>
         </Grid.Col>
       </Grid>
