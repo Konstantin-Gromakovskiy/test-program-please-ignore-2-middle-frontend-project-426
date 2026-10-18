@@ -162,7 +162,7 @@ npm --prefix e2e exec playwright install chromium
 make test
 ```
 
-Проверить, что приложение поднялось, можно по <http://localhost:3000/api/health-check>.
+Проверить, что приложение поднялось, можно по <http://localhost:3000/api/health>.
 
 ### Просмотр документации во время разработки
 

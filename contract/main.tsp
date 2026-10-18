@@ -34,7 +34,7 @@ using OpenAPI;
 namespace Main;
 
 @doc("Проверка статуса сервиса")
-@route("health-check")
+@route("health")
 @operationId("healthCheck")
 op healthCheck(): {
   @statusCode statusCode: 200;
