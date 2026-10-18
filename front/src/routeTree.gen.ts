@@ -16,6 +16,7 @@ import { Route as CatalogRouteImport } from './routes/catalog'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
+import { Route as AuthenticatedCheckoutRouteImport } from './routes/_authenticated/checkout'
 import { Route as ProductsProductIdRouteImport } from './routes/products.$productId'
 
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
@@ -52,6 +53,11 @@ const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedCheckoutRoute = AuthenticatedCheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const ProductsProductIdRoute = ProductsProductIdRouteImport.update({
   id: '/products/$productId',
   path: '/products/$productId',
@@ -65,6 +71,7 @@ export interface FileRoutesByFullPath {
   '/catalog': typeof CatalogRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/checkout': typeof AuthenticatedCheckoutRoute
   '/products/$productId': typeof ProductsProductIdRoute
 }
 export interface FileRoutesByTo {
@@ -73,6 +80,7 @@ export interface FileRoutesByTo {
   '/catalog': typeof CatalogRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/checkout': typeof AuthenticatedCheckoutRoute
   '/products/$productId': typeof ProductsProductIdRoute
   '/': typeof AuthenticatedIndexRoute
 }
@@ -84,6 +92,7 @@ export interface FileRoutesById {
   '/catalog': typeof CatalogRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/_authenticated/checkout': typeof AuthenticatedCheckoutRoute
   '/products/$productId': typeof ProductsProductIdRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
 }
@@ -96,6 +105,7 @@ export interface FileRouteTypes {
     | '/catalog'
     | '/login'
     | '/register'
+    | '/checkout'
     | '/products/$productId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -104,6 +114,7 @@ export interface FileRouteTypes {
     | '/catalog'
     | '/login'
     | '/register'
+    | '/checkout'
     | '/products/$productId'
     | '/'
   id:
@@ -114,6 +125,7 @@ export interface FileRouteTypes {
     | '/catalog'
     | '/login'
     | '/register'
+    | '/_authenticated/checkout'
     | '/products/$productId'
     | '/_authenticated/'
   fileRoutesById: FileRoutesById
@@ -179,6 +191,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/checkout': {
+      id: '/_authenticated/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof AuthenticatedCheckoutRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/products/$productId': {
       id: '/products/$productId'
       path: '/products/$productId'
@@ -190,10 +209,12 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedCheckoutRoute: typeof AuthenticatedCheckoutRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedCheckoutRoute: AuthenticatedCheckoutRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
 }
 

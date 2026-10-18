@@ -67,7 +67,9 @@ export function CartPage() {
         </Text>
       </Group>
       <Group justify="flex-end" mt="md">
-        <Button data-testid="cart-checkout">Оформить заказ</Button>
+        <Button component={Link} to={routes.checkout} data-testid="cart-checkout">
+          Оформить заказ
+        </Button>
       </Group>
     </Box>
   );
