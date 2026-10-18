@@ -25,7 +25,10 @@ export type CartEntry = {
 export type OrderItemRow = Pick<
   CartRow,
   "id" | "name" | "imageUrl" | "unitPrice" | "quantity" | "lineTotal"
->;
+> & {
+  /** false — товара нет в наличии, заказ с ним будет отклонён. */
+  available?: boolean;
+};
 
 export type OrderItemsProps = {
   rows: OrderItemRow[];

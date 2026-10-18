@@ -10,12 +10,15 @@ import {
   Title,
 } from '@mantine/core'
 import { Link } from '@tanstack/react-router'
+import { useCartStore } from '@/entities/cart'
 import { routes } from '@/shared/config'
 import { OrderItems, useCartRows } from '@/widgets/order-items'
 import { CheckoutForm } from './CheckoutForm'
 
 export function CheckoutPage() {
   const { isEmpty, isPending, rows, total } = useCartRows()
+  // На сервер уходит вся корзина: недоступный товар отклоняет заказ целиком
+  const lines = useCartStore((state) => state.items)
 
   if (isEmpty) {
     return (
@@ -37,12 +40,6 @@ export function CheckoutPage() {
       </Center>
     )
   }
-
-  const availableRows = rows.filter((row) => row.available)
-  const lines = availableRows.map(({ id, quantity }) => ({
-    productId: id,
-    quantity,
-  }))
 
   return (
     <Box p="xs" data-testid="checkout-page">
@@ -68,7 +65,7 @@ export function CheckoutPage() {
             <Title order={4} mb="md">
               Состав заказа
             </Title>
-            <OrderItems rows={availableRows} total={total} />
+            <OrderItems rows={rows} total={total} />
           </Paper>
         </Grid.Col>
       </Grid>

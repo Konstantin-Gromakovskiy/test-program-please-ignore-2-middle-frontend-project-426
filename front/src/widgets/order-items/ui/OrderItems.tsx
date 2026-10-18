@@ -1,4 +1,4 @@
-import { Card, Group, Image, Stack, Text } from "@mantine/core";
+import { Badge, Card, Group, Image, Stack, Text } from "@mantine/core";
 import type { OrderItemsProps } from "../model/types";
 
 const IMAGE_FALLBACK = "https://placehold.co/200x150?text=Нет+фото";
@@ -24,8 +24,15 @@ export function OrderItems({ rows, total }: OrderItemsProps) {
                 {row.name}
               </Text>
               <Text size="sm" c="dimmed" data-testid="order-item-qty">
-                {row.unitPrice} × {row.quantity}
+                {row.available === false
+                  ? row.unitPrice
+                  : `${row.unitPrice} × ${row.quantity}`}
               </Text>
+              {row.available === false && (
+                <Badge color="red" w="fit-content" data-testid="order-item-unavailable">
+                  Нет в наличии
+                </Badge>
+              )}
             </Stack>
             <Text fw={700} data-testid="order-item-total">
               {row.lineTotal}
