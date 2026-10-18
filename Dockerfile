@@ -46,4 +46,6 @@ COPY --from=contract-builder /app/contract/index.html /app/contract/index.html
 COPY --from=contract-builder /app/contract/tsp-output/schema/openapi.json /app/contract/tsp-output/schema/openapi.json
 EXPOSE 8080
 
-CMD ["node", "dist/app.js"]
+# Образ готовит базу сам (миграции и сиды идемпотентны): окружение без сервиса migrate
+# (автопроверка Хекслета поднимает только db и app) получает схему и данные при старте
+CMD ["sh", "-c", "node dist/db/setup.js && exec node dist/app.js"]
