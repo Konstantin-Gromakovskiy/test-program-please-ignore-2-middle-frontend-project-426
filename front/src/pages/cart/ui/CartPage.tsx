@@ -12,7 +12,7 @@ import {
 } from "@mantine/core";
 import { Link } from "@tanstack/react-router";
 import { routes } from "@/shared/config";
-import { useCartRows } from "../lib/useCartRows";
+import { useCartRows } from "@/widgets/order-items";
 import { CartItemRow } from "./CartItemRow";
 
 export function CartPage() {
