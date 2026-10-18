@@ -6,6 +6,22 @@ dotenv.config({ path: path.resolve(import.meta.dirname, "../../.env") });
 // в CI DATABASE_URL указывает на хост docker-сети, поэтому тесты берут отдельный адрес
 const url = process.env.E2E_DATABASE_URL ?? process.env.DATABASE_URL;
 
+/** Меняет цену товара в базе (в копейках), чтобы проверить цену на момент покупки. */
+export async function setProductPrice(name: string, kopecks: number) {
+  if (!url) throw new Error("E2E_DATABASE_URL или DATABASE_URL не задан");
+
+  const client = new pg.Client({ connectionString: url });
+  await client.connect();
+  try {
+    await client.query(`update products set price = $1 where name = $2`, [
+      kopecks,
+      name,
+    ]);
+  } finally {
+    await client.end();
+  }
+}
+
 export async function resetDb() {
   if (!url) throw new Error("E2E_DATABASE_URL или DATABASE_URL не задан");
   // защита от случайного запуска против чужой базы
